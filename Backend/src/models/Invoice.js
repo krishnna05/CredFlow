@@ -70,6 +70,23 @@ const invoiceSchema = new mongoose.Schema(
       type: [String],
     },
 
+    financingStatus: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending",
+    },
+
+    financedAmount: {
+      type: Number,
+    },
+
+    platformFee: {
+      type: Number,
+    },
+
+    decisionNotes: {
+      type: [String],
+    },
 
     status: {
       type: String,

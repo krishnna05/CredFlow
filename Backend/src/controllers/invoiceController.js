@@ -7,9 +7,9 @@ const {
 const {
   classifyRisk,
 } = require("../services/riskClassificationService");
-
-
-
+const {
+  decideFinancing,
+} = require("../services/financingDecisionService");
 
 exports.uploadInvoice = async (req, res) => {
   const business = await Business.findOne({
@@ -53,6 +53,16 @@ exports.uploadInvoice = async (req, res) => {
   invoice.riskNotes = risk.notes;
 
   await invoice.save();
+
+  const decision = decideFinancing(invoice);
+
+  invoice.financingStatus = decision.status;
+  invoice.financedAmount = decision.financedAmount || 0;
+  invoice.platformFee = decision.platformFee || 0;
+  invoice.decisionNotes = decision.notes;
+
+  await invoice.save();
+
 
   res.status(201).json(invoice);
 };
