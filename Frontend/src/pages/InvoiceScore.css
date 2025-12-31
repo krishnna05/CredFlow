@@ -1,0 +1,23 @@
+.score-card {
+  border: 1px solid #ddd;
+  padding: 16px;
+  margin-top: 10px;
+  border-radius: 6px;
+}
+
+.grade {
+  font-weight: bold;
+}
+
+.grade.A {
+  color: green;
+}
+
+.grade.B {
+  color: orange;
+}
+
+.grade.C,
+.grade.D {
+  color: red;
+}

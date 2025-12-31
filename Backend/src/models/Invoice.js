@@ -48,6 +48,18 @@ const invoiceSchema = new mongoose.Schema(
       type: [String],
     },
 
+    creditScore: {
+      type: Number,
+    },
+
+    creditGrade: {
+      type: String,
+      enum: ["A", "B", "C", "D"],
+    },
+
+    scoreNotes: {
+      type: [String],
+    },
 
     status: {
       type: String,

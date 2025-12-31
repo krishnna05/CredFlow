@@ -1,6 +1,10 @@
 const Invoice = require("../models/Invoice");
 const Business = require("../models/Business");
 const { validateInvoice } = require("../services/invoiceValidationService");
+const {
+  calculateCreditScore,
+} = require("../services/creditScoringService");
+
 
 
 exports.uploadInvoice = async (req, res) => {
@@ -30,6 +34,15 @@ exports.uploadInvoice = async (req, res) => {
   invoice.validationNotes = validation.errors;
 
   await invoice.save();
+
+  const scoring = calculateCreditScore(invoice, business);
+
+  invoice.creditScore = scoring.score;
+  invoice.creditGrade = scoring.grade;
+  invoice.scoreNotes = scoring.notes;
+
+  await invoice.save();
+
 
 
   res.status(201).json(invoice);
