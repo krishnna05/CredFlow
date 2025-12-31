@@ -61,6 +61,16 @@ const invoiceSchema = new mongoose.Schema(
       type: [String],
     },
 
+    riskLevel: {
+      type: String,
+      enum: ["LOW", "MEDIUM", "HIGH"],
+    },
+
+    riskNotes: {
+      type: [String],
+    },
+
+
     status: {
       type: String,
       enum: [

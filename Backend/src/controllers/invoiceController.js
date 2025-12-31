@@ -4,6 +4,10 @@ const { validateInvoice } = require("../services/invoiceValidationService");
 const {
   calculateCreditScore,
 } = require("../services/creditScoringService");
+const {
+  classifyRisk,
+} = require("../services/riskClassificationService");
+
 
 
 
@@ -43,7 +47,12 @@ exports.uploadInvoice = async (req, res) => {
 
   await invoice.save();
 
+  const risk = classifyRisk(invoice, business);
 
+  invoice.riskLevel = risk.riskLevel;
+  invoice.riskNotes = risk.notes;
+
+  await invoice.save();
 
   res.status(201).json(invoice);
 };
