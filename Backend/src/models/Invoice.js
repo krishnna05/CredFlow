@@ -88,6 +88,20 @@ const invoiceSchema = new mongoose.Schema(
       type: [String],
     },
 
+    repaymentStatus: {
+      type: String,
+      enum: ["pending", "paid", "overdue", "defaulted"],
+      default: "pending",
+    },
+
+    repaymentDate: {
+      type: Date,
+    },
+
+    defaultLoss: {
+      type: Number,
+    },
+
     status: {
       type: String,
       enum: [

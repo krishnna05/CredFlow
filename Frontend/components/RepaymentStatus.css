@@ -1,0 +1,22 @@
+.repayment {
+  margin-top: 8px;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.repayment.paid {
+  background: #e8f8f5;
+}
+
+.repayment.overdue {
+  background: #fff3cd;
+}
+
+.repayment.defaulted {
+  background: #fdecea;
+}
+
+.loss {
+  color: #c0392b;
+  font-weight: bold;
+}
