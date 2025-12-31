@@ -1,5 +1,6 @@
 import { useState } from "react";
 import API from "../services/api";
+import "./BusinessProfile.css";
 
 export default function BusinessProfile() {
   const [form, setForm] = useState({});
@@ -10,24 +11,28 @@ export default function BusinessProfile() {
   };
 
   return (
-    <div className="max-w-xl mx-auto mt-10">
-      <h1 className="text-2xl font-bold mb-4">Business Profile</h1>
+    <div className="business-container">
+      <h1 className="business-title">Business Profile</h1>
 
-      {["businessName","industry","registrationNumber","annualRevenue","yearsInOperation","address"].map((field) => (
+      {[
+        "businessName",
+        "industry",
+        "registrationNumber",
+        "annualRevenue",
+        "yearsInOperation",
+        "address",
+      ].map((field) => (
         <input
           key={field}
           placeholder={field}
-          className="w-full border p-2 mb-2"
+          className="business-input"
           onChange={(e) =>
             setForm({ ...form, [field]: e.target.value })
           }
         />
       ))}
 
-      <button
-        onClick={submit}
-        className="bg-black text-white px-4 py-2 rounded"
-      >
+      <button onClick={submit} className="business-button">
         Save
       </button>
     </div>
