@@ -1,14 +1,40 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useAuth } from "./context/AuthContext";
+
 import Dashboard from "./pages/Dashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 
-<Route path="/admin" element={<AdminDashboard />} />
+function PrivateRoute({ children, role }) {
+  const { user, loading } = useAuth();
+
+  if (loading) return <p>Loading...</p>;
+  if (!user) return <Navigate to="/login" />;
+  if (role && user.role !== role) return <Navigate to="/dashboard" />;
+
+  return children;
+}
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/admin"
+          element={
+            <PrivateRoute role="admin">
+              <AdminDashboard />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
