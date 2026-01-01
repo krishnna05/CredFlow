@@ -10,6 +10,9 @@ const {
 const {
   decideFinancing,
 } = require("../services/financingDecisionService");
+const {
+  detectFraud,
+} = require("../services/fraudDetectionService");
 
 exports.uploadInvoice = async (req, res) => {
   const business = await Business.findOne({
@@ -63,6 +66,18 @@ exports.uploadInvoice = async (req, res) => {
 
   await invoice.save();
 
+  const fraud = await detectFraud(invoice, business);
+
+if (fraud.isFraud) {
+  invoice.fraudStatus = "suspected";
+  invoice.fraudNotes = fraud.notes;
+
+  // Override financing if fraud detected
+  invoice.financingStatus = "rejected";
+  invoice.decisionNotes.push("Rejected due to fraud suspicion");
+}
+
+await invoice.save();
 
   res.status(201).json(invoice);
 };

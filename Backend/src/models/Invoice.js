@@ -102,6 +102,16 @@ const invoiceSchema = new mongoose.Schema(
       type: Number,
     },
 
+    fraudStatus: {
+      type: String,
+      enum: ["clean", "suspected"],
+      default: "clean",
+    },
+
+    fraudNotes: {
+      type: [String],
+    },
+
     status: {
       type: String,
       enum: [
