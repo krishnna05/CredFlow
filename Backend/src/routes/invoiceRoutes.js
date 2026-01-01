@@ -24,4 +24,10 @@ router.get(
   getInvoices
 );
 
+router.get(
+  "/",
+  protect,
+  getNotifications
+);
+
 module.exports = router;

@@ -1,0 +1,15 @@
+.notifications {
+  margin-top: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.note {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.note.read {
+  opacity: 0.6;
+}
