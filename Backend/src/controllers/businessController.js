@@ -7,9 +7,23 @@ exports.createProfile = async (req, res) => {
     return res.status(400).json({ message: "Profile already exists" });
   }
 
+  const {
+    businessName,
+    industry,
+    registrationNumber,
+    annualRevenue,
+    yearsInOperation,
+    address
+  } = req.body;
+
   const business = await Business.create({
     userId: req.user.userId,
-    ...req.body,
+    businessName,
+    industry,
+    registrationNumber,
+    annualRevenue,
+    yearsInOperation,
+    address
   });
 
   res.status(201).json(business);

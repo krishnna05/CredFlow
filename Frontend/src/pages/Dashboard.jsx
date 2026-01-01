@@ -6,6 +6,7 @@ import RiskBadge from "../components/RiskBadge";
 import FraudBadge from "../components/FraudBadge";
 import RepaymentStatus from "../components/RepaymentStatus";
 import FinancingDecision from "../components/FinancingDecision";
+import AIAssistant from "../components/AIAssistant";
 
 export default function Dashboard() {
   const [invoices, setInvoices] = useState([]);
@@ -29,7 +30,6 @@ export default function Dashboard() {
     <div className="dashboard">
       <h1>Business Dashboard</h1>
 
-      {/* Summary Cards */}
       <div className="summary">
         <div className="card">
           <h3>Total Invoices</h3>
@@ -47,20 +47,26 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Invoice List */}
       <div className="invoice-list">
         {invoices.map((inv) => (
           <div key={inv._id} className="invoice-item">
-            <div className="row">
-              <b>{inv.invoiceNumber}</b>
-              <RiskBadge level={inv.riskLevel} />
-              <FraudBadge status={inv.fraudStatus} />
+            <div className="invoice-header">
+              <div className="row">
+                <b>{inv.invoiceNumber}</b>
+                <RiskBadge level={inv.riskLevel} />
+                <FraudBadge status={inv.fraudStatus} />
+              </div>
             </div>
 
-            <p>Amount: ₹{inv.invoiceAmount}</p>
-            <p>Credit Grade: {inv.creditGrade}</p>
+            <div className="invoice-details">
+              <p>Amount: ₹{inv.invoiceAmount}</p>
+              <p>Credit Grade: {inv.creditGrade}</p>
+            </div>
 
             <FinancingDecision invoice={inv} />
+            
+            <AIAssistant invoiceId={inv._id} />
+            
             <RepaymentStatus invoice={inv} />
           </div>
         ))}

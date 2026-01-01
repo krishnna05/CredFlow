@@ -117,7 +117,6 @@ exports.uploadInvoice = async (req, res) => {
     invoice.fraudStatus = "suspected";
     invoice.fraudNotes = fraud.notes;
 
-    // Override financing if fraud detected
     invoice.financingStatus = "rejected";
     invoice.decisionNotes.push("Rejected due to fraud suspicion");
   }

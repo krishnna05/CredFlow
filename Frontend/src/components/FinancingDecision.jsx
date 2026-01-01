@@ -6,7 +6,7 @@ export default function FinancingDecision({ invoice }) {
       <div className="decision rejected">
         <h3>Financing Rejected</h3>
         <ul>
-          {invoice.decisionNotes.map((n, i) => (
+          {invoice.decisionNotes?.map((n, i) => (
             <li key={i}>{n}</li>
           ))}
         </ul>
@@ -21,7 +21,7 @@ export default function FinancingDecision({ invoice }) {
       <p>Platform Fee: ₹{invoice.platformFee}</p>
 
       <ul>
-        {invoice.decisionNotes.map((n, i) => (
+        {invoice.decisionNotes?.map((n, i) => (
           <li key={i}>{n}</li>
         ))}
       </ul>

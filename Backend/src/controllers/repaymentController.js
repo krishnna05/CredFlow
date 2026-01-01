@@ -24,8 +24,13 @@ exports.markPaid = async (req, res) => {
 
 // Admin checks defaults
 exports.checkDefaults = async (req, res) => {
+  const gracePeriodMs = 30 * 24 * 60 * 60 * 1000;
+  const cutoffDate = new Date(Date.now() - gracePeriodMs);
+
   const invoices = await Invoice.find({
     financingStatus: "approved",
+    repaymentStatus: "pending",
+    dueDate: { $lt: cutoffDate },
   });
 
   let updated = [];

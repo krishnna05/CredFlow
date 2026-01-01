@@ -5,6 +5,7 @@ const upload = require("../middleware/uploadMiddleware");
 const {
   uploadInvoice,
   getInvoices,
+  getNotifications,
 } = require("../controllers/invoiceController");
 
 const { protect, allowRoles } = require("../middleware/authMiddleware");
@@ -25,7 +26,7 @@ router.get(
 );
 
 router.get(
-  "/",
+  "/notifications",
   protect,
   getNotifications
 );

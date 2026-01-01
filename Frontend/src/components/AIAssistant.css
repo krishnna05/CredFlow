@@ -1,0 +1,42 @@
+.ai-box {
+  background: #f8f9fa;
+  border-left: 4px solid #646cff;
+  padding: 15px;
+  margin-top: 15px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.ai-box h4 {
+  margin: 0 0 10px 0;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ai-loading {
+  color: #666;
+  font-style: italic;
+}
+
+.ai-messages {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ai-messages li {
+  margin-bottom: 6px;
+  line-height: 1.4;
+  color: #444;
+}
+
+.ai-messages li::before {
+  content: "•";
+  color: #646cff;
+  font-weight: bold;
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
+}
