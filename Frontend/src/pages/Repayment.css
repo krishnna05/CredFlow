@@ -1,0 +1,35 @@
+.subtitle {
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+.repayment-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.repayment-table th,
+.repayment-table td {
+  padding: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.status {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.status.paid {
+  color: #16a34a;
+}
+
+.status.pending {
+  color: #ca8a04;
+}
+
+.status.defaulted {
+  color: #dc2626;
+}

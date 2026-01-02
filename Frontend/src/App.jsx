@@ -9,6 +9,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import BusinessProfile from "./pages/BusinessProfile";
 import Invoices from "./pages/Invoices";
 import Notifications from "./pages/Notifications";
+import Financing from "./pages/Financing"; 
+import RiskFraud from "./pages/RiskFraud"; 
 
 function PrivateRoute({ children, role }) {
   const { user, loading } = useAuth();
@@ -28,7 +30,6 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
 
-          {/* Wrap Protected Routes in Layout */}
           <Route element={<Layout />}>
             <Route
               path="/dashboard"
@@ -59,6 +60,22 @@ export default function App() {
               element={
                 <PrivateRoute>
                   <Invoices />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/financing"
+              element={
+                <PrivateRoute>
+                  <Financing />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/risk"
+              element={
+                <PrivateRoute>
+                  <RiskFraud />
                 </PrivateRoute>
               }
             />

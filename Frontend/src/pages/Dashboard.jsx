@@ -16,10 +16,13 @@ import {
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
+import RiskBadge from "../components/RiskBadge";
+import FraudBadge from "../components/FraudBadge";
+
 export default function Dashboard() {
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { user } = useAuth(); // 'logout' removed as it's not used here anymore
+  const { user } = useAuth(); 
 
   useEffect(() => {
     API.get("/invoices")
@@ -33,7 +36,6 @@ export default function Dashboard() {
       });
   }, []);
 
-  // KPI Calculations
   const totalInvoices = invoices.length;
   const totalFinanced = invoices.reduce((sum, inv) => sum + (inv.financedAmount || 0), 0);
   const totalExposure = invoices.reduce((sum, inv) => sum + (inv.financingStatus === "approved" ? (inv.financedAmount || 0) : 0), 0);
@@ -43,7 +45,6 @@ export default function Dashboard() {
   const formatDate = (dateString) => dateString ? new Date(dateString).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "N/A";
 
   return (
-    // Added padding container to replace the removed .main-scroll-area styling
     <div style={{ padding: "32px 48px" }}>
         <header className="page-header">
             <div className="header-title">

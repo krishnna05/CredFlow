@@ -1,0 +1,186 @@
+.risk-page {
+  --risk-bg-dark: #0a0a0a;
+  --risk-bg-panel: #161616;
+  --risk-border: #2a2a2a;
+  --risk-text-main: #ffffff;
+  --risk-text-sub: #a1a1a1;
+  
+  --color-low: #00d97e;
+  --color-med: #f2c94c;
+  --color-high: #ff4d4d;
+  --color-blue: #3b82f6;
+
+  background-color: var(--risk-bg-dark);
+  color: var(--risk-text-main);
+  min-height: 100vh;
+  padding: 32px 48px;
+  font-family: 'Inter', sans-serif;
+}
+
+/* --- HEADER --- */
+.risk-page .risk-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 32px;
+}
+.risk-page .risk-header h1 {
+  font-family: 'Manrope', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: #fff;
+}
+.risk-page .risk-header p {
+  color: var(--risk-text-sub);
+  font-size: 14px;
+  margin: 0;
+}
+.risk-page .header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* --- BUTTONS --- */
+.risk-page .btn-risk-primary, 
+.risk-page .btn-risk-secondary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.risk-page .btn-risk-primary {
+  background-color: var(--color-low);
+  color: #000;
+}
+.risk-page .btn-risk-primary:hover { opacity: 0.9; }
+
+.risk-page .btn-risk-secondary {
+  background-color: var(--risk-bg-panel);
+  color: var(--risk-text-main);
+  border: 1px solid var(--risk-border);
+}
+.risk-page .btn-risk-secondary:hover { border-color: var(--risk-text-sub); }
+
+/* --- KPI GRID --- */
+.risk-page .kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 32px;
+}
+.risk-page .kpi-card {
+  background: var(--risk-bg-panel);
+  border: 1px solid var(--risk-border);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.risk-page .kpi-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.risk-page .kpi-icon.blue { background: rgba(59, 130, 246, 0.15); color: var(--color-blue); }
+.risk-page .kpi-icon.red { background: rgba(255, 77, 77, 0.15); color: var(--color-high); }
+.risk-page .kpi-icon.orange { background: rgba(242, 201, 76, 0.15); color: var(--color-med); }
+.risk-page .kpi-icon.gray { background: #2a2a2a; color: #888; }
+
+.risk-page .kpi-info label { display: block; font-size: 12px; color: var(--risk-text-sub); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+.risk-page .kpi-info h3 { font-family: 'Manrope', sans-serif; font-size: 24px; margin: 0; color: #fff; }
+
+/* --- CONTENT LAYOUT --- */
+.risk-page .risk-content-grid {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 24px;
+}
+.risk-page .risk-panel {
+  background: var(--risk-bg-panel);
+  border: 1px solid var(--risk-border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.risk-page .risk-panel h4 { 
+  margin: 0 0 20px 0; 
+  font-size: 16px; 
+  font-weight: 600; 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+  color: #fff;
+}
+
+/* --- ALERTS --- */
+.risk-page .alert-list { display: flex; flex-direction: column; gap: 12px; }
+.risk-page .alert-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  border-left: 3px solid transparent;
+  background: rgba(255,255,255,0.03);
+}
+.risk-page .alert-item.high { border-left-color: var(--color-high); }
+.risk-page .alert-item.medium { border-left-color: var(--color-med); }
+.risk-page .alert-item svg { margin-top: 2px; }
+.risk-page .alert-item.high svg { color: var(--color-high); }
+.risk-page .alert-item.medium svg { color: var(--color-med); }
+
+.risk-page .alert-title { display: block; font-weight: 600; font-size: 13px; margin-bottom: 2px; color: #fff; }
+.risk-page .alert-desc { font-size: 12px; color: var(--risk-text-sub); }
+
+/* --- TABLE --- */
+.risk-page .risk-panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.risk-page .risk-table-controls { display: flex; gap: 8px; }
+.risk-page .risk-search-box {
+  display: flex;
+  align-items: center;
+  background: #000;
+  border: 1px solid var(--risk-border);
+  padding: 6px 12px;
+  border-radius: 6px;
+  gap: 8px;
+}
+.risk-page .risk-search-box input { background: transparent; border: none; color: white; outline: none; font-size: 13px; }
+.risk-page .risk-search-box svg { color: var(--risk-text-sub); }
+
+.risk-page .risk-table { width: 100%; border-collapse: collapse; }
+.risk-page .risk-table th { text-align: left; color: var(--risk-text-sub); font-size: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--risk-border); }
+.risk-page .risk-table td { padding: 16px 0; border-bottom: 1px solid var(--risk-border); font-size: 14px; vertical-align: middle; color: #fff; }
+
+.risk-page .cell-group { display: flex; flex-direction: column; }
+.risk-page .font-mono { font-family: monospace; color: var(--color-blue); }
+.risk-page .sub-text { font-size: 12px; color: var(--risk-text-sub); margin-top: 2px; }
+
+/* --- SCORES & ACTIONS --- */
+.risk-page .score-badge-wrapper { display: flex; align-items: center; gap: 12px; }
+.risk-page .score-badge {
+  font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 4px; min-width: 30px; text-align: center;
+}
+.risk-page .score-badge.low { background: rgba(0, 217, 126, 0.1); color: var(--color-low); }
+.risk-page .score-badge.medium { background: rgba(242, 201, 76, 0.1); color: var(--color-med); }
+.risk-page .score-badge.high { background: rgba(255, 77, 77, 0.1); color: var(--color-high); }
+
+.risk-page .risk-bar { width: 60px; height: 4px; background: #333; border-radius: 2px; overflow: hidden; }
+.risk-page .risk-fill { height: 100%; }
+.risk-page .risk-fill.low { background: var(--color-low); }
+.risk-page .risk-fill.medium { background: var(--color-med); }
+.risk-page .risk-fill.high { background: var(--color-high); }
+
+.risk-page .action-row { display: flex; gap: 8px; }
+.risk-page .btn-icon { background: transparent; border: 1px solid var(--risk-border); color: var(--risk-text-sub); padding: 6px; border-radius: 6px; cursor: pointer; display: flex; }
+.risk-page .btn-icon:hover { background: #222; color: #fff; }
+.risk-page .btn-icon.danger:hover { background: rgba(255, 77, 77, 0.1); border-color: var(--color-high); color: var(--color-high); }
