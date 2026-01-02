@@ -1,129 +1,119 @@
 const Invoice = require("../models/Invoice");
 const Business = require("../models/Business");
 const { validateInvoice } = require("../services/invoiceValidationService");
-const {
-  calculateCreditScore,
-} = require("../services/creditScoringService");
-const {
-  classifyRisk,
-} = require("../services/riskClassificationService");
-const {
-  decideFinancing,
-} = require("../services/financingDecisionService");
-const {
-  detectFraud,
-} = require("../services/fraudDetectionService");
+const { calculateCreditScore } = require("../services/creditScoringService");
+const { classifyRisk } = require("../services/riskClassificationService");
+const { decideFinancing } = require("../services/financingDecisionService");
+const { detectFraud } = require("../services/fraudDetectionService");
 const { logEvent } = require("../utils/auditLogger");
-const { sendNotification } =
-  require("../services/notificationService");
+const { sendNotification } = require("../services/notificationService");
 const Notification = require("../models/Notification");
 
 exports.uploadInvoice = async (req, res) => {
-  const business = await Business.findOne({
-    userId: req.user.userId,
-  });
+  try {
+    const business = await Business.findOne({
+      userId: req.user.userId,
+    });
 
-  if (!business) {
-    return res
-      .status(400)
-      .json({ message: "Business profile required" });
+    if (!business) {
+      return res
+        .status(400)
+        .json({ message: "Business profile required" });
+    }
+
+    // 1. Create Initial Invoice Record
+    const invoice = await Invoice.create({
+      businessId: business._id,
+      invoiceNumber: req.body.invoiceNumber,
+      buyerName: req.body.buyerName,
+      invoiceAmount: req.body.invoiceAmount,
+      issueDate: req.body.issueDate,
+      dueDate: req.body.dueDate,
+      pdfUrl: req.file ? req.file.path : "demo_url.pdf", // Handle file path safely
+    });
+
+    await logEvent({
+      userId: req.user.userId,
+      action: "INVOICE_UPLOADED",
+      entityType: "invoice",
+      entityId: invoice._id,
+      message: "Invoice uploaded by business",
+    });
+
+    // 2. 🚨 FRAUD EVALUATION (First Step)
+    const fraudResult = await detectFraud(invoice, business);
+    
+    invoice.fraudStatus = fraudResult.status;
+    invoice.fraudNotes = fraudResult.notes;
+
+    if (fraudResult.status === "fraud" || fraudResult.status === "flagged") {
+      // STOP HERE: Block financing
+      invoice.financingStatus = "blocked";
+      invoice.status = "blocked";
+      invoice.decisionNotes = ["Blocked due to fraud/suspicious activity"];
+      
+      await invoice.save();
+
+      // Log the Block
+      await logEvent({
+        userId: req.user.userId,
+        action: "FRAUD_BLOCKED",
+        entityType: "invoice",
+        entityId: invoice._id,
+        message: `Blocked: ${fraudResult.notes.join(", ")}`,
+      });
+
+      return res.status(201).json(invoice); // Return early
+    }
+
+    // 3. Validation (If not fraud)
+    const validation = validateInvoice(invoice, business);
+    invoice.validationStatus = validation.isValid ? "valid" : "invalid";
+    invoice.validationNotes = validation.errors;
+
+    if (!validation.isValid) {
+      invoice.financingStatus = "rejected";
+      invoice.decisionNotes = ["Invoice validation failed"];
+      await invoice.save();
+      return res.status(201).json(invoice);
+    }
+
+    // 4. Credit Scoring
+    const scoring = calculateCreditScore(invoice, business);
+    invoice.creditScore = scoring.score;
+    invoice.creditGrade = scoring.grade;
+    invoice.scoreNotes = scoring.notes;
+
+    // 5. 🧠 RISK CLASSIFICATION (Second Step)
+    const risk = classifyRisk(invoice, business);
+    invoice.riskLevel = risk.riskLevel;
+    invoice.riskNotes = risk.notes;
+
+    // 6. Financing Decision (Based on Risk)
+    const decision = decideFinancing(invoice);
+    invoice.financingStatus = decision.status;
+    invoice.financedAmount = decision.financedAmount || 0;
+    invoice.platformFee = decision.platformFee || 0;
+    invoice.decisionNotes = decision.notes;
+
+    // Final Save
+    await invoice.save();
+
+    // Notifications
+    if (invoice.financingStatus === "approved") {
+      await sendNotification({
+        userId: req.user.userId,
+        title: "Financing Approved",
+        message: `₹${invoice.financedAmount} eligible for invoice ${invoice.invoiceNumber}`,
+      });
+    }
+
+    res.status(201).json(invoice);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error during upload" });
   }
-
-  const invoice = await Invoice.create({
-    businessId: business._id,
-    invoiceNumber: req.body.invoiceNumber,
-    buyerName: req.body.buyerName,
-    invoiceAmount: req.body.invoiceAmount,
-    issueDate: req.body.issueDate,
-    dueDate: req.body.dueDate,
-    pdfUrl: req.file.path,
-  });
-
-  await logEvent({
-    userId: req.user.userId,
-    action: "INVOICE_UPLOADED",
-    entityType: "invoice",
-    entityId: invoice._id,
-    message: "Invoice uploaded by business",
-  });
-
-  await logEvent({
-    userId: req.user.userId,
-    action:
-      invoice.financingStatus === "approved"
-        ? "FINANCING_APPROVED"
-        : "FINANCING_REJECTED",
-    entityType: "invoice",
-    entityId: invoice._id,
-    message: invoice.decisionNotes.join(", "),
-  });
-
-  await logEvent({
-    userId: req.user.userId,
-    action: "FRAUD_FLAGGED",
-    entityType: "invoice",
-    entityId: invoice._id,
-    message: invoice.fraudNotes.join(", "),
-  });
-
-  await logEvent({
-    userId: req.user.userId,
-    action: "DEFAULT_OCCURRED",
-    entityType: "invoice",
-    entityId: invoice._id,
-    message: "Invoice defaulted after grace period",
-  });
-
-  await sendNotification({
-    userId: req.user.userId,
-    title: "Financing Approved",
-    message: `₹${invoice.financedAmount} has been credited for invoice ${invoice.invoiceNumber}`,
-  });
-
-  const validation = validateInvoice(invoice, business);
-
-  invoice.validationStatus = validation.isValid ? "valid" : "invalid";
-  invoice.validationNotes = validation.errors;
-
-  await invoice.save();
-
-  const scoring = calculateCreditScore(invoice, business);
-
-  invoice.creditScore = scoring.score;
-  invoice.creditGrade = scoring.grade;
-  invoice.scoreNotes = scoring.notes;
-
-  await invoice.save();
-
-  const risk = classifyRisk(invoice, business);
-
-  invoice.riskLevel = risk.riskLevel;
-  invoice.riskNotes = risk.notes;
-
-  await invoice.save();
-
-  const decision = decideFinancing(invoice);
-
-  invoice.financingStatus = decision.status;
-  invoice.financedAmount = decision.financedAmount || 0;
-  invoice.platformFee = decision.platformFee || 0;
-  invoice.decisionNotes = decision.notes;
-
-  await invoice.save();
-
-  const fraud = await detectFraud(invoice, business);
-
-  if (fraud.isFraud) {
-    invoice.fraudStatus = "suspected";
-    invoice.fraudNotes = fraud.notes;
-
-    invoice.financingStatus = "rejected";
-    invoice.decisionNotes.push("Rejected due to fraud suspicion");
-  }
-
-  await invoice.save();
-
-  res.status(201).json(invoice);
 };
 
 exports.getInvoices = async (req, res) => {

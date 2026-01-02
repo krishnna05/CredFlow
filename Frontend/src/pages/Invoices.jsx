@@ -6,17 +6,19 @@ import {
   XCircle, 
   Clock, 
   DollarSign, 
-  Eye, 
-  UploadCloud 
+  UploadCloud,
+  Lock
 } from "lucide-react";
 import "./Invoices.css";
-import API from "../services/api"; 
+import RiskBadge from "../components/RiskBadge";
+import FraudBadge from "../components/FraudBadge";
+// import API from "../services/api"; 
 
 export default function Invoices() {
   const [invoices, setInvoices] = useState([]);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
 
+  // Form State
   const [formData, setFormData] = useState({
     invoiceNumber: "",
     clientName: "",
@@ -25,17 +27,37 @@ export default function Invoices() {
     file: null
   });
 
+  // --- MOCK DATA (Updated with Fraud Scenarios) ---
   useEffect(() => {
     setInvoices([
-      { _id: "1", client: "Acme Corp", amount: 12000, due: "2025-02-15", status: "Approved", invoiceNumber: "INV-001", risk: "Low" },
-      { _id: "2", client: "Globex Inc", amount: 4500, due: "2025-01-20", status: "Financed", invoiceNumber: "INV-002", risk: "Low" },
-      { _id: "3", client: "Soylent Corp", amount: 8900, due: "2025-03-01", status: "Pending", invoiceNumber: "INV-003", risk: "Medium" },
-      { _id: "4", client: "Umbrella Corp", amount: 15000, due: "2024-12-10", status: "Repaid", invoiceNumber: "INV-004", risk: "Low" },
-      { _id: "5", client: "Initech", amount: 20000, due: "2025-04-10", status: "Rejected", invoiceNumber: "INV-005", risk: "High" },
+      { 
+        _id: "1", client: "Acme Corp", amount: 12000, due: "2025-02-15", 
+        status: "Approved", invoiceNumber: "INV-001", 
+        riskLevel: "LOW", fraudStatus: "clean" 
+      },
+      { 
+        _id: "2", client: "Globex Inc", amount: 4500, due: "2025-01-20", 
+        status: "Financed", invoiceNumber: "INV-002", 
+        riskLevel: "LOW", fraudStatus: "clean" 
+      },
+      { 
+        _id: "3", client: "Soylent Corp", amount: 890000, due: "2025-03-01", 
+        status: "Blocked", invoiceNumber: "INV-003", 
+        riskLevel: "HIGH", fraudStatus: "flagged" // Flagged due to amount spike
+      },
+      { 
+        _id: "4", client: "Initech", amount: 20000, due: "2025-04-10", 
+        status: "Blocked", invoiceNumber: "INV-001", // Duplicate ID
+        riskLevel: "HIGH", fraudStatus: "fraud" 
+      },
+      { 
+        _id: "5", client: "Umbrella Corp", amount: 15000, due: "2024-12-10", 
+        status: "Repaid", invoiceNumber: "INV-004", 
+        riskLevel: "LOW", fraudStatus: "clean" 
+      },
     ]);
   }, []);
 
-  // --- HANDLERS ---
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -47,18 +69,8 @@ export default function Invoices() {
 
   const handleUploadSubmit = (e) => {
     e.preventDefault();
-    console.log("Uploading to Cloudinary:", formData);
-    
-    const newInv = {
-      _id: Date.now(),
-      client: formData.clientName,
-      amount: parseFloat(formData.amount),
-      due: formData.dueDate,
-      status: "Pending",
-      invoiceNumber: formData.invoiceNumber,
-      risk: "Calculating..."
-    };
-    setInvoices([newInv, ...invoices]);
+    console.log("Uploading:", formData);
+    // Add logic to send to backend here
     setIsUploadOpen(false);
   };
 
@@ -68,19 +80,29 @@ export default function Invoices() {
       case "Pending": return <span className="badge badge-pending"><Clock size={12}/> Pending</span>;
       case "Approved": return <span className="badge badge-approved"><CheckCircle size={12}/> Approved</span>;
       case "Financed": return <span className="badge badge-financed"><DollarSign size={12}/> Financed</span>;
-      case "Repaid": return <span className="badge badge-repaid"><CheckCircle size={12}/> Repaid</span>;
+      case "Blocked": return <span className="badge badge-rejected"><Lock size={12}/> Blocked</span>;
       case "Rejected": return <span className="badge badge-rejected"><XCircle size={12}/> Rejected</span>;
       default: return <span className="badge">{status}</span>;
     }
   };
 
-  // --- HELPER: Action Buttons based on Status ---
+  // --- HELPER: Action Buttons (The Logic Core) ---
   const renderActions = (inv) => {
+    // 🛑 BLOCKING LOGIC: If Fraud or Flagged, DISABLE everything
+    if (inv.fraudStatus === "fraud" || inv.fraudStatus === "flagged") {
+      return (
+        <button className="btn-action disabled" disabled title="Action Blocked by Risk Engine">
+          <Lock size={12} /> Blocked
+        </button>
+      );
+    }
+
+    // Normal Flow
     switch (inv.status) {
       case "Pending":
-        return <button className="btn-action secondary" disabled>⏳ Under Review</button>;
+        return <button className="btn-action secondary" disabled>⏳ Processing</button>;
       case "Approved":
-        return <button className="btn-action primary">💸 Request Financing</button>;
+        return <button className="btn-action primary">💸 Get Financed</button>;
       case "Financed":
         return <button className="btn-action outline">📄 View Loan</button>;
       case "Repaid":
@@ -88,24 +110,22 @@ export default function Invoices() {
       case "Rejected":
         return <button className="btn-action danger">View Reason</button>;
       default:
-        return null;
+        return <span className="text-muted">-</span>;
     }
   };
 
   return (
     <div className="invoices-page">
-      {/* HEADER */}
       <header className="page-header">
         <div>
           <h1>Invoice Management</h1>
-          <p className="subtitle">Upload, track, and finance your invoices.</p>
+          <p className="subtitle">Risk & Fraud Analysis Active</p>
         </div>
         <button className="btn-primary" onClick={() => setIsUploadOpen(true)}>
           <Plus size={18} /> Upload Invoice
         </button>
       </header>
 
-      {/* MAIN TABLE */}
       <div className="table-container">
         <table className="invoices-table">
           <thead>
@@ -114,7 +134,7 @@ export default function Invoices() {
               <th>Client</th>
               <th>Amount</th>
               <th>Due Date</th>
-              <th>Risk</th>
+              <th>Risk Assessment</th> {/* Merged Column */}
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -127,8 +147,12 @@ export default function Invoices() {
                 <td>${inv.amount.toLocaleString()}</td>
                 <td>{inv.due}</td>
                 <td>
-                  <span className={`risk-dot ${inv.risk?.toLowerCase()}`}></span> 
-                  {inv.risk}
+                  <div className="badge-row" style={{display: 'flex', gap: '8px', alignItems: 'center'}}>
+                    {/* Show Fraud Badge FIRST - Hierarchy Rule */}
+                    <FraudBadge status={inv.fraudStatus} />
+                    {/* Show Risk Badge only if not Fraud (or always, per design choice) */}
+                    {inv.fraudStatus === 'clean' && <RiskBadge level={inv.riskLevel} />}
+                  </div>
                 </td>
                 <td>{getStatusBadge(inv.status)}</td>
                 <td>{renderActions(inv)}</td>

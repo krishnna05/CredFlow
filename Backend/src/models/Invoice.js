@@ -72,7 +72,7 @@ const invoiceSchema = new mongoose.Schema(
 
     financingStatus: {
       type: String,
-      enum: ["pending", "approved", "rejected"],
+      enum: ["pending", "approved", "rejected", "blocked"], // Added 'blocked'
       default: "pending",
     },
 
@@ -104,7 +104,7 @@ const invoiceSchema = new mongoose.Schema(
 
     fraudStatus: {
       type: String,
-      enum: ["clean", "suspected"],
+      enum: ["clean", "flagged", "fraud"], // Updated Enum
       default: "clean",
     },
 
@@ -120,6 +120,7 @@ const invoiceSchema = new mongoose.Schema(
         "financed",
         "repaid",
         "defaulted",
+        "blocked"
       ],
       default: "uploaded",
     },

@@ -2,21 +2,33 @@
   margin-top: 8px;
   padding: 8px;
   border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid transparent; 
 }
 
 .repayment.paid {
-  background: #e8f8f5;
+  /* Teal/Green background */
+  background: rgba(26, 188, 156, 0.1);
+  color: var(--accent-primary, #1abc9c);
+  border-color: rgba(26, 188, 156, 0.2);
 }
 
 .repayment.overdue {
-  background: #fff3cd;
+  /* Amber background */
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--accent-amber, #f59e0b);
+  border-color: rgba(245, 158, 11, 0.2);
 }
 
 .repayment.defaulted {
-  background: #fdecea;
+  /* Red background */
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--accent-red, #ef4444);
+  border-color: rgba(239, 68, 68, 0.2);
 }
 
 .loss {
-  color: #c0392b;
-  font-weight: bold;
+  color: var(--accent-red, #ef4444);
+  font-weight: 700;
 }

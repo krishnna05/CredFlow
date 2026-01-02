@@ -1,20 +1,30 @@
 .subtitle {
-  color: #6b7280;
+  color: var(--text-secondary, #6b7280);
   margin-bottom: 20px;
 }
 
 .repayment-table {
   width: 100%;
   border-collapse: collapse;
-  background: white;
+  background: var(--bg-panel, #FFFFFF);
   border-radius: 8px;
   overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
-.repayment-table th,
+.repayment-table th {
+  padding: 12px;
+  border-bottom: 1px solid var(--border-subtle, #E5E7EB);
+  background: var(--bg-app, #F3F4F6);
+  color: var(--text-muted, #9CA3AF);
+  font-weight: 600;
+  text-align: left;
+}
+
 .repayment-table td {
   padding: 12px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-subtle, #E5E7EB);
+  color: var(--text-primary, #111827);
 }
 
 .status {
@@ -23,13 +33,13 @@
 }
 
 .status.paid {
-  color: #16a34a;
+  color: var(--accent-primary, #16a34a);
 }
 
 .status.pending {
-  color: #ca8a04;
+  color: var(--accent-amber, #ca8a04);
 }
 
 .status.defaulted {
-  color: #dc2626;
+  color: var(--accent-red, #dc2626);
 }

@@ -1,13 +1,22 @@
 .notifications {
   margin-top: 20px;
-  border: 1px solid #ddd;
+  /* Use global border and panel background */
+  border: 1px solid var(--border-subtle, #E5E7EB);
   border-radius: 8px;
   padding: 12px;
+  background: var(--bg-panel, #FFFFFF);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
 .note {
-  padding: 8px;
-  border-bottom: 1px solid #eee;
+  padding: 12px;
+  border-bottom: 1px solid var(--border-subtle, #E5E7EB);
+  color: var(--text-primary, #111827);
+  transition: opacity 0.2s;
+}
+
+.note:last-child {
+  border-bottom: none;
 }
 
 .note.read {

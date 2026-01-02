@@ -6,10 +6,12 @@
   --font-ui: 'Inter', sans-serif;
   --font-display: 'Manrope', sans-serif;
   
-  --bg-app: #030304;
-  color-scheme: dark;
-  background-color: #000000;
-  color: #ededed;
+  --bg-app: #F3F4F6; 
+  
+  color-scheme: light;
+  background-color: #F3F4F6;
+  
+  color: #111827; 
 }
 
 html, body, #root {
@@ -17,7 +19,7 @@ html, body, #root {
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden; /* Hide native scrollbars, let the scaler handle it */
+  overflow: hidden; 
   background-color: var(--bg-app);
 }
 
@@ -27,14 +29,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* GLOBAL 85% ZOOM SCALER */
-/* 100% / 0.85 = 117.647% dimensions to fill the screen */
 .app-scaler {
   width: 117.647%;
   height: 117.647vh;
   transform: scale(0.85);
   transform-origin: top left;
-  overflow-y: auto; /* Default scroll for pages like Login/Signup */
+  overflow-y: auto;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;

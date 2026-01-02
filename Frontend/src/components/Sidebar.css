@@ -1,13 +1,11 @@
-/* Sidebar.css */
 .sidebar-column {
   width: 280px;
-  background: var(--bg-sidebar, #09090b);
-  border-right: 1px solid var(--border-subtle, #1f1f23);
+  background: var(--bg-sidebar, #FFFFFF);
+  border-right: 1px solid var(--border-subtle, #E5E7EB);
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  height: 100%; /* Fill the layout height */
-  /* REMOVED position: fixed */
+  height: 100%;
   position: relative; 
   z-index: 50;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -27,7 +25,7 @@
 .logo-box {
   width: 32px; height: 32px;
   background: var(--accent-primary, #1abc9c);
-  color: #000;
+  color: #fff;
   font-family: var(--font-display, sans-serif);
   font-weight: 800;
   font-size: 18px;
@@ -39,7 +37,7 @@
   font-family: var(--font-display, sans-serif);
   font-size: 18px;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary, #111827);
 }
 
 .sidebar-content {
@@ -51,28 +49,27 @@
   gap: 24px;
 }
 
-/* ... Keep the rest of your button/nav styles the same ... */
 .nav-group-label {
-  font-size: 11px; font-weight: 700; color: var(--text-muted, #71717a);
+  font-size: 11px; font-weight: 700; color: var(--text-muted, #9CA3AF);
   text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; padding-left: 12px;
 }
 .nav-links { display: flex; flex-direction: column; gap: 4px; }
 .nav-item {
   display: flex; align-items: center; gap: 12px; padding: 10px 12px;
-  border-radius: 8px; color: var(--text-secondary, #a1a1aa); text-decoration: none;
+  border-radius: 8px; color: var(--text-secondary, #4B5563); text-decoration: none;
   font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; position: relative;
 }
-.nav-item:hover { background: rgba(255,255,255,0.03); color: var(--text-primary, #ffffff); }
+.nav-item:hover { background: rgba(0,0,0,0.05); color: var(--text-primary, #111827); }
 .nav-item.active { background: var(--accent-primary-dim, rgba(26, 188, 156, 0.1)); color: var(--accent-primary, #1abc9c); font-weight: 600; }
 .nav-badge {
-  margin-left: auto; background: var(--border-subtle, #1f1f23); padding: 2px 8px;
-  border-radius: 12px; font-size: 11px; color: #fff; font-weight: 600; border: 1px solid rgba(255,255,255,0.05);
+  margin-left: auto; background: var(--border-subtle, #E5E7EB); padding: 2px 8px;
+  border-radius: 12px; font-size: 11px; color: var(--text-secondary, #4B5563); font-weight: 600; border: 1px solid rgba(0,0,0,0.05);
 }
 
 .sidebar-footer {
   padding: 20px;
-  border-top: 1px solid var(--border-subtle, #1f1f23);
-  background: rgba(0,0,0,0.2);
+  border-top: 1px solid var(--border-subtle, #E5E7EB);
+  background: rgba(0,0,0,0.02);
   flex-shrink: 0;
 }
 
@@ -80,30 +77,30 @@
   display: flex; align-items: center; gap: 12px; padding: 8px;
   border-radius: 12px; transition: background 0.2s;
 }
-.user-card:hover { background: rgba(255,255,255,0.03); }
+.user-card:hover { background: rgba(0,0,0,0.05); }
 .avatar {
   width: 36px; height: 36px; background: linear-gradient(135deg, #2c3e50, #4ca1af);
   border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  font-weight: 700; color: #fff; font-size: 13px; border: 2px solid var(--bg-sidebar, #09090b);
+  font-weight: 700; color: #fff; font-size: 13px; border: 2px solid var(--bg-sidebar, #FFFFFF);
 }
 .user-meta { flex: 1; overflow: hidden; }
-.user-meta .name { display: block; font-size: 14px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.user-meta .role { display: block; font-size: 12px; color: var(--text-muted, #71717a); }
+.user-meta .name { display: block; font-size: 14px; font-weight: 600; color: var(--text-primary, #111827); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.user-meta .role { display: block; font-size: 12px; color: var(--text-muted, #9CA3AF); }
 .logout-btn {
-  background: none; border: none; color: var(--text-muted, #71717a);
+  background: none; border: none; color: var(--text-muted, #9CA3AF);
   cursor: pointer; padding: 6px; border-radius: 6px; display: flex; align-items: center; justify-content: center;
 }
 .logout-btn:hover { background: rgba(239,68,68,0.1); color: var(--accent-red, #ef4444); }
 
 /* Mobile Styles */
-.mobile-close { display: none; background: none; border: none; color: #fff; cursor: pointer; }
+.mobile-close { display: none; background: none; border: none; color: var(--text-primary, #111827); cursor: pointer; }
 
 @media (max-width: 768px) {
   .sidebar-column {
-    position: absolute; /* Revert to absolute for mobile overlay */
+    position: absolute;
     height: 100%; top: 0; left: 0;
     transform: translateX(-100%);
-    box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+    box-shadow: 10px 0 30px rgba(0,0,0,0.15);
   }
   .sidebar-column.mobile-open { transform: translateX(0); }
   .mobile-close { display: block; }

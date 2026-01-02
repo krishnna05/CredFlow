@@ -1,9 +1,9 @@
 .app-layout {
   display: flex;
   width: 100%;
-  height: 100%; /* Take full height of the scaler */
-  background-color: var(--bg-app, #030304);
-  overflow: hidden; /* Prevent double scrolling */
+  height: 100%;
+  background-color: var(--bg-app, #F3F4F6);
+  overflow: hidden;
 }
 
 .main-content {
@@ -11,24 +11,23 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  overflow-y: auto; /* content scrolls independently */
+  overflow-y: auto;
   overflow-x: hidden;
   position: relative;
-  background: var(--bg-app, #030304);
-  /* Removed margin-left because we are using flexbox now */
+  background: var(--bg-app, #F3F4F6);
 }
 
 .mobile-header { 
   display: none; 
   padding: 16px 20px; 
   justify-content: space-between; 
-  background: var(--bg-sidebar, #09090b); 
-  border-bottom: 1px solid var(--border-subtle, #1f1f23); 
+  background: var(--bg-sidebar, #FFFFFF); 
+  border-bottom: 1px solid var(--border-subtle, #E5E7EB); 
   align-items: center;
   flex-shrink: 0;
 }
 
-.menu-trigger { background: none; border: none; cursor: pointer; color: #fff; }
+.menu-trigger { background: none; border: none; cursor: pointer; color: var(--text-primary, #111827); }
 
 .mobile-overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0.5); 
@@ -37,7 +36,6 @@
 }
 .mobile-overlay.active { opacity: 1; pointer-events: auto; }
 
-/* Responsive */
 @media (max-width: 768px) {
   .app-layout { flex-direction: column; }
   .main-content { width: 100%; }
