@@ -1,7 +1,9 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 
+import Layout from "./components/Layout";
 import Login from "./pages/Login";
+import Signup from "./pages/Signup"; 
 import Dashboard from "./pages/Dashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import BusinessProfile from "./pages/BusinessProfile";
@@ -20,57 +22,59 @@ function PrivateRoute({ children, role }) {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<Login />} />
+    <div className="app-scaler">
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
 
-        <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
-          }
-        />
+          {/* Wrap Protected Routes in Layout */}
+          <Route element={<Layout />}>
+            <Route
+              path="/dashboard"
+              element={
+                <PrivateRoute>
+                  <Dashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <PrivateRoute role="admin">
+                  <AdminDashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <PrivateRoute>
+                  <BusinessProfile />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/invoices"
+              element={
+                <PrivateRoute>
+                  <Invoices />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/notifications"
+              element={
+                <PrivateRoute>
+                  <Notifications />
+                </PrivateRoute>
+              }
+            />
+          </Route>
 
-        <Route
-          path="/admin"
-          element={
-            <PrivateRoute role="admin">
-              <AdminDashboard />
-            </PrivateRoute>
-          }
-        />
-
-        <Route
-          path="/profile"
-          element={
-            <PrivateRoute>
-              <BusinessProfile />
-            </PrivateRoute>
-          }
-        />
-
-        <Route
-          path="/invoices"
-          element={
-            <PrivateRoute>
-              <Invoices />
-            </PrivateRoute>
-          }
-        />
-
-        <Route
-          path="/notifications"
-          element={
-            <PrivateRoute>
-              <Notifications />
-            </PrivateRoute>
-          }
-        />
-
-        <Route path="*" element={<Navigate to="/dashboard" />} />
-      </Routes>
-    </BrowserRouter>
+          <Route path="*" element={<Navigate to="/dashboard" />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }

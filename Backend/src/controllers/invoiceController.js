@@ -131,6 +131,10 @@ exports.getInvoices = async (req, res) => {
     userId: req.user.userId,
   });
 
+  if (!business) {
+    return res.status(400).json({ message: "Business profile required" });
+  }
+
   const invoices = await Invoice.find({
     businessId: business._id,
   }).sort({ createdAt: -1 });
