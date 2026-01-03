@@ -1,53 +1,42 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useState, useEffect } from 'react';
+import authService from '../services/authService';
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
-export function AuthProvider({ children }) {
+export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, SF] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const userData = localStorage.getItem("user");
+    const storedUser = localStorage.getItem('user');
+    const token = localStorage.getItem('token');
 
-    if (token && userData) {
-      try {
-        setUser(JSON.parse(userData));
-      } catch (error) {
-        console.error("Failed to parse user data from localStorage:", error);
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        setUser(null);
-      }
+    if (storedUser && token) {
+      setUser(JSON.parse(storedUser));
     }
-
-    setLoading(false);
+    SF(false);
   }, []);
 
-  // Login handler
-  const login = (token, userData) => {
-    localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(userData));
-    setUser(userData);
+  const login = async (email, password) => {
+    const data = await authService.login(email, password);
+    setUser(data.user);
+    return data;
   };
 
-  // Logout handler
+  const register = async (userData) => {
+    const data = await authService.register(userData);
+    setUser(data.user);
+    return data;
+  };
+
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    authService.logout();
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider
-      value={{ user, login, logout, loading }}
-    >
-      {children}
+    <AuthContext.Provider value={{ user, login, register, logout, loading }}>
+      {!loading && children}
     </AuthContext.Provider>
   );
-}
-
-// Custom hook
-export function useAuth() {
-  return useContext(AuthContext);
-}
+};

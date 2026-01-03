@@ -16,6 +16,11 @@ const generateToken = (user) => {
 exports.register = async (req, res) => {
   const { name, email, password } = req.body;
 
+  // Validation
+  if (!name || !email || !password) {
+    return res.status(400).json({ message: "Please provide name, email, and password" });
+  }
+
   const existingUser = await User.findOne({ email });
   if (existingUser) {
     return res.status(400).json({ message: "Email already registered" });
@@ -43,6 +48,11 @@ exports.register = async (req, res) => {
 // Login
 exports.login = async (req, res) => {
   const { email, password } = req.body;
+
+  // Validation
+  if (!email || !password) {
+    return res.status(400).json({ message: "Please provide email and password" });
+  }
 
   const user = await User.findOne({ email });
   if (!user || !user.isActive) {

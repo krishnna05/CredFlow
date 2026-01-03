@@ -1,97 +1,46 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useAuth } from "./context/AuthContext";
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import Layout from './components/layout/Layout';
 
-import Layout from "./components/Layout";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup"; 
-import Dashboard from "./pages/Dashboard";
-import AdminDashboard from "./pages/AdminDashboard";
-import BusinessProfile from "./pages/BusinessProfile";
-import Invoices from "./pages/Invoices";
-import Notifications from "./pages/Notifications";
-import Financing from "./pages/Financing"; 
-import RiskFraud from "./pages/RiskFraud"; 
+import Login from './pages/auth/Login';
+import Register from './pages/auth/Register';
 
-function PrivateRoute({ children, role }) {
-  const { user, loading } = useAuth();
+import Dashboard from './pages/dashboard/Dashboard';
+import BusinessProfile from './pages/onboarding/BusinessProfile';
+import InvoiceList from './pages/invoices/InvoiceList';
+import InvoiceDetail from './pages/invoices/InvoiceDetail';
+import UploadPage from './pages/upload/UploadPage';
 
-  if (loading) return <p>Loading...</p>;
-  if (!user) return <Navigate to="/login" />;
-  if (role && user.role !== role) return <Navigate to="/dashboard" />;
+const Analytics = () => <div className="p-8 text-center text-gray-500">Analytics Module Coming Soon</div>;
+const History = () => <div className="p-8 text-center text-gray-500">Audit Logs & History Coming Soon</div>;
 
-  return children;
-}
-
-export default function App() {
+function App() {
   return (
-    <div className="app-scaler">
-      <BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+          <Route path="/register" element={<Register />} />
 
           <Route element={<Layout />}>
-            <Route
-              path="/dashboard"
-              element={
-                <PrivateRoute>
-                  <Dashboard />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/admin"
-              element={
-                <PrivateRoute role="admin">
-                  <AdminDashboard />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                <PrivateRoute>
-                  <BusinessProfile />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/invoices"
-              element={
-                <PrivateRoute>
-                  <Invoices />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/financing"
-              element={
-                <PrivateRoute>
-                  <Financing />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/risk"
-              element={
-                <PrivateRoute>
-                  <RiskFraud />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/notifications"
-              element={
-                <PrivateRoute>
-                  <Notifications />
-                </PrivateRoute>
-              }
-            />
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/onboarding" element={<BusinessProfile />} />
+
+            <Route path="/invoices" element={<InvoiceList />} />
+            <Route path="/invoices/:id" element={<InvoiceDetail />} />
+            <Route path="/upload" element={<UploadPage />} />
+
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/history" element={<History />} />
           </Route>
 
-          <Route path="*" element={<Navigate to="/dashboard" />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
-      </BrowserRouter>
-    </div>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
+
+export default App;
