@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Wallet, Building, Activity, FileCheck } from 'lucide-react';
 import businessService from '../../services/businessService';
 import StatCard from '../../components/dashboard/StatCard';
+import RecentActivity from '../../components/dashboard/RecentActivity'; // Import added
 import useAuth from '../../hooks/useAuth';
 import Button from '../../components/common/Button';
 
@@ -11,6 +12,12 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  // Mock activity data (replace with API call later)
+  const recentActivities = [
+    { id: 1, type: 'INVOICE_UPLOAD', title: 'Invoice #INV-2024-001 Uploaded', description: 'Analysis pending', timestamp: new Date().toISOString() },
+    { id: 2, type: 'RISK_ASSESSMENT', title: 'Risk Analysis Complete', description: 'Low risk detected for Inv #001', timestamp: new Date(Date.now() - 86400000).toISOString() }
+  ];
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -87,15 +94,21 @@ const Dashboard = () => {
         />
       </div>
 
-      <div className="bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 p-12 text-center">
-        <div className="max-w-md mx-auto">
-          <h3 className="text-lg font-semibold text-gray-900">No recent activity</h3>
-          <p className="text-gray-500 mt-2 mb-6">
-            Upload your first invoice to generate an AI credit analysis and get financing offers.
-          </p>
-          <Button variant="primary" onClick={() => navigate('/upload')}>
-            Upload Invoice
-          </Button>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2">
+             {/* Main Chart Area could go here */}
+             <div className="bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 p-12 text-center h-full flex flex-col justify-center">
+                <div className="max-w-md mx-auto">
+                  <h3 className="text-lg font-semibold text-gray-900">Revenue Trends</h3>
+                  <p className="text-gray-500 mt-2 mb-6">
+                    Chart data will appear here once you have sufficient history.
+                  </p>
+                </div>
+              </div>
+        </div>
+        
+        <div className="lg:col-span-1">
+           <RecentActivity activities={recentActivities} />
         </div>
       </div>
     </div>

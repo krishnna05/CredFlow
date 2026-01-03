@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Download, ExternalLink, Calendar, Wallet } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Calendar, Wallet } from 'lucide-react';
 import { format } from 'date-fns';
 import clsx from 'clsx';
 
 import invoiceService from '../../services/invoiceService';
 import CreditScoreGauge from '../analytics/CreditScoreGauge';
 import RiskReport from '../analytics/RiskReport';
+import FraudAlertBox from '../analytics/FraudAlertBox';
 import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
 import Button from '../../components/common/Button';
@@ -82,6 +83,11 @@ const InvoiceDetail = () => {
           )}
         </div>
       </div>
+
+      {/* Fraud Alert Section - Renders only if fraudCheck data is present */}
+      {invoice.fraudCheck && (
+        <FraudAlertBox fraudCheck={invoice.fraudCheck} />
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 

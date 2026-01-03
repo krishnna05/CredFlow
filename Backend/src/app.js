@@ -8,6 +8,8 @@ const invoiceRoutes = require("./routes/invoiceRoutes");
 const repaymentRoutes = require("./routes/repaymentRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const assistantRoutes = require("./routes/assistantRoutes");
+const auditLogRoutes = require("./routes/auditLogRoutes");
+const notificationRoutes = require("./routes/notificationRoutes");
 
 const app = express();
 
@@ -16,7 +18,7 @@ app.use(helmet());
 app.use(cors({
   origin: process.env.FRONTEND_URL || "http://localhost:5173",
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE"]
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"] 
 }));
 
 app.use(express.json());
@@ -27,6 +29,8 @@ app.use("/api/invoices", invoiceRoutes);
 app.use("/api/repayment", repaymentRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/assistant", assistantRoutes);
+app.use("/api/audit-logs", auditLogRoutes);     
+app.use("/api/notifications", notificationRoutes); 
 
 app.use((err, req, res, next) => {
   console.error("Server Error:", err.stack);

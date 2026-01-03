@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Building2, Briefcase, IndianRupee, FileText } from 'lucide-react';
+import { Building2, Briefcase, IndianRupee, FileText, ArrowRight } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
 import InputField from '../../components/form/InputField';
@@ -30,7 +30,7 @@ const BusinessProfile = () => {
 
   const [formData, setFormData] = useState({
     businessName: '',
-    taxId: '', // GSTIN
+    taxId: '', 
     industry: '',
     annualRevenue: '',
     businessType: '',
@@ -46,7 +46,6 @@ const BusinessProfile = () => {
     if (!formData.industry) newErrors.industry = "Please select an industry";
     if (!formData.businessType) newErrors.businessType = "Please select a business type";
 
-    // Revenue validation
     if (!formData.annualRevenue) {
       newErrors.annualRevenue = "Revenue is required";
     } else if (isNaN(formData.annualRevenue) || Number(formData.annualRevenue) < 0) {
@@ -80,30 +79,49 @@ const BusinessProfile = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto py-8">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Complete your profile</h1>
-        <p className="text-gray-500 mt-1">
-          Tell us about your business to get personalized financing offers.
+    <div className="w-full max-w-2xl mx-auto">
+      
+      {/* Decorative Background Elements */}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 right-1/4 w-80 h-80 bg-[#D1F34B]/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-blue-100/40 rounded-full blur-3xl" />
+      </div>
+
+      <div className="text-center mb-6 pt-2">
+        <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">
+          Setup Your Business
+        </h1>
+        <p className="text-sm text-gray-500 max-w-lg mx-auto">
+          Help us tailor your financing experience. It only takes a minute.
         </p>
       </div>
 
-      <div className="bg-white p-6 md:p-8 rounded-2xl border border-gray-100 shadow-sm">
-        <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="bg-white rounded-2xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden relative">
+        
+        <div className="h-1 w-full bg-gray-100">
+          <div className="h-full w-2/3 bg-[#D1F34B]" />
+        </div>
 
-          <div className="space-y-6">
-            <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider border-b border-gray-100 pb-2">
-              Business Details
-            </h3>
+        <form onSubmit={handleSubmit} className="p-6 md:p-8 space-y-8">
+          
+          {/* Section 1 */}
+          <div className="space-y-4 animate-in slide-in-from-bottom-4 duration-500">
+            <div className="flex items-center gap-2.5 border-b border-gray-100 pb-3">
+              <div className="h-7 w-7 rounded-full bg-gray-50 flex items-center justify-center border border-gray-200 text-gray-600">
+                <Building2 size={14} />
+              </div>
+              <h3 className="text-base font-bold text-gray-900">Company Identity</h3>
+            </div>
 
-            <div className="grid md:grid-cols-2 gap-5">
+            <div className="grid md:grid-cols-2 gap-4">
               <InputField
                 label="Business Name"
-                placeholder="e.g. Acme Traders Pvt Ltd"
+                placeholder="e.g. Acme Innovations Ltd"
                 icon={Building2}
                 value={formData.businessName}
                 onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
                 error={errors.businessName}
+                className="bg-gray-50/50 focus:bg-white transition-all text-sm py-2"
               />
 
               <InputField
@@ -113,42 +131,50 @@ const BusinessProfile = () => {
                 value={formData.taxId}
                 onChange={(e) => setFormData({ ...formData, taxId: e.target.value.toUpperCase() })}
                 error={errors.taxId}
+                className="bg-gray-50/50 focus:bg-white transition-all uppercase text-sm py-2"
               />
             </div>
 
-            <div className="grid md:grid-cols-2 gap-5">
+            <div className="grid md:grid-cols-2 gap-4">
               <SelectBox
-                label="Industry"
+                label="Industry Sector"
                 options={INDUSTRIES}
                 value={formData.industry}
                 onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
                 error={errors.industry}
+                className="text-sm py-2"
               />
 
               <SelectBox
-                label="Business Type"
+                label="Legal Structure"
                 options={BUSINESS_TYPES}
                 value={formData.businessType}
                 onChange={(e) => setFormData({ ...formData, businessType: e.target.value })}
                 error={errors.businessType}
+                className="text-sm py-2"
               />
             </div>
           </div>
 
-          <div className="space-y-6">
-            <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider border-b border-gray-100 pb-2 pt-2">
-              Financial Overview
-            </h3>
+          {/* Section 2 */}
+          <div className="space-y-4 animate-in slide-in-from-bottom-8 duration-700">
+            <div className="flex items-center gap-2.5 border-b border-gray-100 pb-3">
+              <div className="h-7 w-7 rounded-full bg-gray-50 flex items-center justify-center border border-gray-200 text-gray-600">
+                <IndianRupee size={14} />
+              </div>
+              <h3 className="text-base font-bold text-gray-900">Financial Metrics</h3>
+            </div>
 
-            <div className="grid md:grid-cols-2 gap-5">
+            <div className="grid md:grid-cols-2 gap-4">
               <InputField
-                label="Annual Revenue (₹)"
-                placeholder="e.g. 5000000"
+                label="Annual Revenue"
+                placeholder="e.g. 50,00,000"
                 type="number"
                 icon={IndianRupee}
                 value={formData.annualRevenue}
                 onChange={(e) => setFormData({ ...formData, annualRevenue: e.target.value })}
                 error={errors.annualRevenue}
+                className="bg-gray-50/50 focus:bg-white transition-all text-sm py-2"
               />
 
               <InputField
@@ -159,13 +185,24 @@ const BusinessProfile = () => {
                 value={formData.yearsInOperation}
                 onChange={(e) => setFormData({ ...formData, yearsInOperation: e.target.value })}
                 error={errors.yearsInOperation}
+                className="bg-gray-50/50 focus:bg-white transition-all text-sm py-2"
               />
             </div>
           </div>
 
-          <div className="pt-4 flex items-center justify-end gap-3">
-            <Button type="submit" variant="primary" loading={loading} className="w-full md:w-auto">
-              Complete Setup
+          <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-gray-100 mt-6">
+             <p className="text-xs text-gray-400">
+               <span className="text-gray-900 font-medium">Safe & Secure.</span> Your data is encrypted.
+             </p>
+            
+            <Button 
+              type="submit" 
+              variant="primary" 
+              loading={loading} 
+              className="w-full sm:w-auto bg-gray-900 hover:bg-black text-white px-6 py-2.5 rounded-xl shadow-lg shadow-gray-900/20 hover:shadow-xl transition-all duration-300 group flex items-center justify-center gap-2 text-sm"
+            >
+              <span>Complete Setup</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </div>
 
