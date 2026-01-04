@@ -1,4 +1,4 @@
-import { ShieldAlert, ShieldCheck, AlertTriangle, CheckCircle } from 'lucide-react';
+import { ShieldAlert, ShieldCheck, AlertTriangle } from 'lucide-react';
 import { clsx } from 'clsx';
 
 const FraudAlertBox = ({ fraudCheck }) => {
@@ -11,57 +11,57 @@ const FraudAlertBox = ({ fraudCheck }) => {
 
   return (
     <div className={clsx(
-      "rounded-xl border p-6 transition-all duration-200",
-      isSafe ? "bg-green-50/50 border-green-200" : 
-      isHighRisk ? "bg-red-50/50 border-red-200" : "bg-orange-50/50 border-orange-200"
+      "rounded-2xl border p-5 transition-all duration-300 hover:shadow-md",
+      isSafe ? "bg-emerald-50/40 border-emerald-100" : 
+      isHighRisk ? "bg-rose-50/40 border-rose-100" : "bg-amber-50/40 border-amber-100"
     )}>
       <div className="flex items-start gap-4">
         <div className={clsx(
-          "p-3 rounded-full shrink-0",
-          isSafe ? "bg-green-100 text-green-600" : 
-          isHighRisk ? "bg-red-100 text-red-600" : "bg-orange-100 text-orange-600"
+          "p-3 rounded-xl shrink-0 shadow-sm border",
+          isSafe ? "bg-emerald-100 text-emerald-600 border-emerald-200" : 
+          isHighRisk ? "bg-rose-100 text-rose-600 border-rose-200" : "bg-amber-100 text-amber-600 border-amber-200"
         )}>
-          {isSafe ? <ShieldCheck className="w-6 h-6" /> : <ShieldAlert className="w-6 h-6" />}
+          {isSafe ? <ShieldCheck className="w-5 h-5" /> : <ShieldAlert className="w-5 h-5" />}
         </div>
 
         <div className="flex-1">
           <div className="flex items-center justify-between">
             <h3 className={clsx(
-              "text-lg font-bold",
-              isSafe ? "text-green-900" : 
-              isHighRisk ? "text-red-900" : "text-orange-900"
+              "text-base font-bold",
+              isSafe ? "text-emerald-900" : 
+              isHighRisk ? "text-rose-900" : "text-amber-900"
             )}>
               {isSafe ? 'Fraud Check Passed' : 'Fraud Alert Detected'}
             </h3>
             <span className={clsx(
-              "text-sm font-bold px-3 py-1 rounded-full",
-              isSafe ? "bg-green-200 text-green-800" : 
-              isHighRisk ? "bg-red-200 text-red-800" : "bg-orange-200 text-orange-800"
+              "text-xs font-bold px-2.5 py-0.5 rounded-full border",
+              isSafe ? "bg-emerald-100 text-emerald-700 border-emerald-200" : 
+              isHighRisk ? "bg-rose-100 text-rose-700 border-rose-200" : "bg-amber-100 text-amber-700 border-amber-200"
             )}>
-              Score: {100 - riskScore}/100
+              Safe Score: {100 - riskScore}/100
             </span>
           </div>
 
           <p className={clsx(
-            "mt-1 text-sm",
-            isSafe ? "text-green-700" : 
-            isHighRisk ? "text-red-700" : "text-orange-700"
+            "mt-1 text-sm leading-relaxed",
+            isSafe ? "text-emerald-700" : 
+            isHighRisk ? "text-rose-700" : "text-amber-700"
           )}>
             {isSafe 
-              ? "This document appears authentic. No significant irregularities were found." 
-              : "Potential security risks have been identified. Please review the flagged items below."}
+              ? "Authenticity verified. No irregularities detected." 
+              : "Security risks identified. Review flagged items below."}
           </p>
 
           {!isSafe && flaggedFields.length > 0 && (
-            <div className="mt-4 bg-white/60 rounded-lg p-4 border border-black/5">
-              <h4 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4" />
+            <div className="mt-4 bg-white/80 rounded-xl p-3 border border-rose-100 shadow-sm">
+              <h4 className="text-xs font-bold text-slate-700 mb-2 flex items-center gap-1.5 uppercase tracking-wide">
+                <AlertTriangle className="w-3.5 h-3.5 text-rose-500" />
                 Risk Factors
               </h4>
-              <ul className="space-y-2">
+              <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 {flaggedFields.map((field, index) => (
-                  <li key={index} className="flex items-start gap-2 text-sm text-gray-700">
-                    <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0" />
+                  <li key={index} className="flex items-center gap-2 text-xs font-medium text-slate-600 bg-rose-50 px-2 py-1 rounded-md">
+                    <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0 shadow-[0_0_4px_rgba(244,63,94,0.5)]" />
                     {field}
                   </li>
                 ))}

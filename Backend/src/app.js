@@ -10,6 +10,7 @@ const adminRoutes = require("./routes/adminRoutes");
 const assistantRoutes = require("./routes/assistantRoutes");
 const auditLogRoutes = require("./routes/auditLogRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
+const analyticsRoutes = require("./routes/analyticsRoutes");
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/assistant", assistantRoutes);
 app.use("/api/audit-logs", auditLogRoutes);     
 app.use("/api/notifications", notificationRoutes); 
+app.use("/api/analytics", analyticsRoutes);
 
 app.use((err, req, res, next) => {
   console.error("Server Error:", err.stack);
