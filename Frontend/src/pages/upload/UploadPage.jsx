@@ -44,7 +44,6 @@ const UploadPage = () => {
     try {
       const data = new FormData();
       data.append('file', file);
-      // Append other fields...
       Object.keys(formData).forEach(key => data.append(key, formData[key]));
 
       await invoiceService.upload(data);
@@ -59,9 +58,7 @@ const UploadPage = () => {
   };
 
   return (
-    // FIX: Changed bg-slate-50 to bg-[#F0F4FF] (Light Indigo Tint)
     <div className="min-h-screen bg-[#F6F8FF]">
-      {/* Decorative Technical Background Pattern */}
       <div className="absolute inset-0 z-0 opacity-[0.05]" 
            style={{ backgroundImage: 'radial-gradient(#4f46e5 1px, transparent 1px)', backgroundSize: '24px 24px' }}>
       </div>
@@ -74,20 +71,19 @@ const UploadPage = () => {
               <Home className="w-4 h-4" />
             </button>
             <ChevronRight className="w-4 h-4 text-slate-300" />
-            <span className="font-medium text-slate-900">Upload Invoice</span>
+            <span className="font-bold text-slate-900">Upload Invoice</span>
           </nav>
           
           <div className="flex items-start justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Upload New Invoice</h1>
+              {/* <h1 className="text-xl font-bold text-slate-900 tracking-tight">Upload New Invoice</h1> */}
               <p className="text-slate-500 mt-1 text-sm">Upload your invoice details for AI-powered credit assessment.</p>
             </div>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="grid lg:grid-cols-3 gap-8 items-start">
-          
-          {/* LEFT COLUMN: File Upload (The Primary Action) */}
+
           <div className="lg:col-span-1 space-y-6">
             <div className="bg-white rounded-xl shadow-[0_2px_12px_-4px_rgba(0,0,0,0.08)] border border-slate-200 overflow-hidden">
               <div className="p-5 border-b border-slate-100 bg-slate-50/50">
@@ -97,7 +93,6 @@ const UploadPage = () => {
               <div className="p-5">
                 <FileUpload file={file} setFile={setFile} error={errors.file} />
                 
-                {/* Micro-helper text */}
                 <div className="mt-4 p-3 bg-indigo-50/50 rounded-lg border border-indigo-100 flex gap-3">
                   <div className="mt-0.5">
                     <Sparkles className="w-4 h-4 text-indigo-600" />
@@ -113,7 +108,6 @@ const UploadPage = () => {
             </div>
           </div>
 
-          {/* RIGHT COLUMN: Metadata Form */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-xl shadow-[0_2px_12px_-4px_rgba(0,0,0,0.08)] border border-slate-200">
               <div className="p-5 border-b border-slate-100 bg-slate-50/50">
@@ -175,7 +169,6 @@ const UploadPage = () => {
                 </div>
               </div>
 
-              {/* Action Bar */}
               <div className="px-6 py-4 bg-slate-50 border-t border-slate-200 rounded-b-xl flex items-center justify-end gap-3">
                  <button
                   type="button"

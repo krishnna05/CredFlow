@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import RiskTrendChart from './RiskTrendChart';
 import CreditScoreGauge from './CreditScoreGauge';
 import Card from '../../components/common/Card';
-import axiosInstance from '../../api/axiosInstance'; // [CHANGED] Import axiosInstance
+import axiosInstance from '../../api/axiosInstance'; 
 
 const StatCard = ({ title, value, DQ, trend, trendValue, icon: Icon, color }) => {
   const isPositive = trend === 'up';
