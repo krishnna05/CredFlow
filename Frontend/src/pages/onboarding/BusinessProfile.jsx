@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Building2, Briefcase, IndianRupee, FileText, ArrowRight } from 'lucide-react';
+import { Building2, Briefcase, IndianRupee, FileText, ArrowRight, MapPin } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
 import InputField from '../../components/form/InputField';
@@ -11,30 +11,54 @@ import businessService from '../../services/businessService';
 const INDUSTRIES = [
   { value: 'Retail', label: 'Retail & E-commerce' },
   { value: 'Manufacturing', label: 'Manufacturing' },
+  { value: 'Wholesale', label: 'Wholesale & Distribution' },
+  { value: 'IT', label: 'IT & Software Services' },
+  { value: 'FinTech', label: 'FinTech & Financial Services' },
+  { value: 'Healthcare', label: 'Healthcare & Pharmaceuticals' },
+  { value: 'Education', label: 'Education & EdTech' },
   { value: 'Services', label: 'Professional Services' },
   { value: 'Logistics', label: 'Logistics & Transport' },
   { value: 'Construction', label: 'Construction & Real Estate' },
+  { value: 'Hospitality', label: 'Hospitality & Tourism' },
+  { value: 'Food', label: 'Food & Beverage' },
+  { value: 'Agriculture', label: 'Agriculture & Agribusiness' },
+  { value: 'Media', label: 'Media, Advertising & Entertainment' },
+  { value: 'Telecom', label: 'Telecom & Networking' },
+  { value: 'Energy', label: 'Energy, Power & Utilities' },
+  { value: 'Automotive', label: 'Automotive & Auto Components' },
+  { value: 'Textile', label: 'Textile & Apparel' },
+  { value: 'Chemicals', label: 'Chemicals & Industrial Materials' },
   { value: 'Other', label: 'Other' },
 ];
 
 const BUSINESS_TYPES = [
   { value: 'Sole Proprietorship', label: 'Sole Proprietorship' },
-  { value: 'Partnership', label: 'Partnership' },
-  { value: 'Private Limited', label: 'Private Limited' },
-  { value: 'LLP', label: 'Limited Liability Partnership' },
+  { value: 'Partnership', label: 'Partnership Firm' },
+  { value: 'Private Limited', label: 'Private Limited Company' },
+  { value: 'Public Limited', label: 'Public Limited Company' },
+  { value: 'LLP', label: 'Limited Liability Partnership (LLP)' },
+  { value: 'One Person Company', label: 'One Person Company (OPC)' },
+  { value: 'HUF', label: 'Hindu Undivided Family (HUF)' },
+  { value: 'Trust', label: 'Trust' },
+  { value: 'Society', label: 'Society' },
+  { value: 'Section 8', label: 'Section 8 Company (Non-Profit)' },
+  { value: 'Government', label: 'Government / PSU' },
+  { value: 'Startup', label: 'Registered Startup' },
 ];
 
 const BusinessProfile = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
+  // Updated state to match Backend/src/models/Business.js exactly
   const [formData, setFormData] = useState({
     businessName: '',
-    taxId: '', 
+    registrationNumber: '', // Backend expects 'registrationNumber', NOT 'taxId'
     industry: '',
     annualRevenue: '',
-    businessType: '',
-    yearsInOperation: ''
+    yearsInOperation: '',
+    address: '', // Backend requires this field
+    businessType: '' // Kept for UI state, even if backend ignores it currently
   });
 
   const [errors, setErrors] = useState({});
@@ -42,9 +66,10 @@ const BusinessProfile = () => {
   const validate = () => {
     const newErrors = {};
     if (!formData.businessName) newErrors.businessName = "Business name is required";
-    if (!formData.taxId) newErrors.taxId = "GSTIN/Tax ID is required";
+    if (!formData.registrationNumber) newErrors.registrationNumber = "GSTIN/Registration No. is required";
     if (!formData.industry) newErrors.industry = "Please select an industry";
     if (!formData.businessType) newErrors.businessType = "Please select a business type";
+    if (!formData.address) newErrors.address = "Business address is required"; // New validation
 
     if (!formData.annualRevenue) {
       newErrors.annualRevenue = "Revenue is required";
@@ -62,11 +87,19 @@ const BusinessProfile = () => {
 
     setLoading(true);
     try {
-      await businessService.createProfile({
-        ...formData,
+      // 1. Prepare payload matching Backend/src/controllers/businessController.js
+      const payload = {
+        businessName: formData.businessName,
+        industry: formData.industry,
+        registrationNumber: formData.registrationNumber, // Must match backend key
         annualRevenue: Number(formData.annualRevenue),
-        yearsInOperation: Number(formData.yearsInOperation) || 0
-      });
+        yearsInOperation: Number(formData.yearsInOperation) || 0,
+        address: formData.address // Must be included
+      };
+
+      console.log("Submitting Payload:", payload); // Debugging
+
+      await businessService.createProfile(payload);
 
       toast.success("Profile created successfully!");
       navigate('/dashboard');
@@ -104,7 +137,7 @@ const BusinessProfile = () => {
 
         <form onSubmit={handleSubmit} className="p-6 md:p-8 space-y-8">
           
-          {/* Section 1 */}
+          {/* Section 1: Company Identity */}
           <div className="space-y-4 animate-in slide-in-from-bottom-4 duration-500">
             <div className="flex items-center gap-2.5 border-b border-gray-100 pb-3">
               <div className="h-7 w-7 rounded-full bg-gray-50 flex items-center justify-center border border-gray-200 text-gray-600">
@@ -113,6 +146,7 @@ const BusinessProfile = () => {
               <h3 className="text-base font-bold text-gray-900">Company Identity</h3>
             </div>
 
+            {/* Row 1 */}
             <div className="grid md:grid-cols-2 gap-4">
               <InputField
                 label="Business Name"
@@ -125,16 +159,17 @@ const BusinessProfile = () => {
               />
 
               <InputField
-                label="GSTIN / Tax ID"
+                label="GSTIN / Registration No"
                 placeholder="22AAAAA0000A1Z5"
                 icon={FileText}
-                value={formData.taxId}
-                onChange={(e) => setFormData({ ...formData, taxId: e.target.value.toUpperCase() })}
-                error={errors.taxId}
+                value={formData.registrationNumber}
+                onChange={(e) => setFormData({ ...formData, registrationNumber: e.target.value.toUpperCase() })}
+                error={errors.registrationNumber}
                 className="bg-gray-50/50 focus:bg-white transition-all uppercase text-sm py-2"
               />
             </div>
 
+            {/* Row 2 */}
             <div className="grid md:grid-cols-2 gap-4">
               <SelectBox
                 label="Industry Sector"
@@ -154,9 +189,22 @@ const BusinessProfile = () => {
                 className="text-sm py-2"
               />
             </div>
+            
+            {/* Row 3: Added Address Field (Required by Backend) */}
+            <div className="grid grid-cols-1">
+              <InputField
+                label="Business Address"
+                placeholder="Full registered office address"
+                icon={MapPin}
+                value={formData.address}
+                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                error={errors.address}
+                className="bg-gray-50/50 focus:bg-white transition-all text-sm py-2"
+              />
+            </div>
           </div>
 
-          {/* Section 2 */}
+          {/* Section 2: Financial Metrics */}
           <div className="space-y-4 animate-in slide-in-from-bottom-8 duration-700">
             <div className="flex items-center gap-2.5 border-b border-gray-100 pb-3">
               <div className="h-7 w-7 rounded-full bg-gray-50 flex items-center justify-center border border-gray-200 text-gray-600">
