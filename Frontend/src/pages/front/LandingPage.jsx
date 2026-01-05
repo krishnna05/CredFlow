@@ -50,13 +50,17 @@ const LandingPage = () => {
       
       {/* NAVBAR */}
       <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-slate-950/80 border-b border-slate-800">
-        <div className="max-w-7xl mx-auto px-6 h-16 md:h-20 flex items-center justify-between">
+        {/* Updated Height: h-16 -> h-[72px] for slightly bigger mobile view */}
+        <div className="max-w-7xl mx-auto px-6 h-[72px] md:h-20 flex items-center justify-between">
           {/* Logo Section */}
           <div className="flex items-center gap-2 md:gap-3">
-            <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
-              <span className="font-bold text-lg md:text-xl">C</span>
+            {/* Updated Logo Size: w-8 h-8 -> w-9 h-9 */}
+            <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
+              {/* Updated Text Size: text-lg -> text-xl */}
+              <span className="font-bold text-xl md:text-xl">C</span>
             </div>
-            <span className="text-lg md:text-2xl font-bold text-white tracking-tight">CredFlow</span>
+            {/* Updated Brand Text Size: text-lg -> text-xl */}
+            <span className="text-xl md:text-2xl font-bold text-white tracking-tight">CredFlow</span>
           </div>
 
           {/* Desktop Navigation */}

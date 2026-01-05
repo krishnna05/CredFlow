@@ -18,13 +18,13 @@ const Layout = () => {
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return (
     // 1. Updated Container Classes
     <div className="min-h-screen w-full bg-slate-950 font-sans selection:bg-indigo-500/30 text-slate-200">
-      
+
       {/* 2. ADDED: Background Effects */}
       <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-[-10%] right-[-5%] w-[800px] h-[800px] bg-indigo-600/20 rounded-full blur-[120px] mix-blend-screen animate-pulse duration-1000" />
