@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   LogIn, Mail, Lock, ArrowRight,
@@ -11,7 +11,13 @@ import useAuth from '../../hooks/useAuth';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, user } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard');
+    }
+  }, [user, navigate]);
 
   const [formData, setFormData] = useState({
     email: '',
@@ -31,7 +37,7 @@ const Login = () => {
     try {
       await login(formData.email, formData.password);
       toast.success('Welcome back!');
-      navigate('/dashboard');
+      // navigation handled by useEffect
     } catch (error) {
       console.error(error);
       toast.error(error.response?.data?.message || 'Invalid credentials');

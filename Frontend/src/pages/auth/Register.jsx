@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   UserPlus, Mail, Lock, User, ArrowRight,
@@ -11,7 +11,13 @@ import useAuth from '../../hooks/useAuth';
 
 const Register = () => {
   const navigate = useNavigate();
-  const { register } = useAuth();
+  const { register, user } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      navigate('/onboarding');
+    }
+  }, [user, navigate]);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -53,7 +59,6 @@ const Register = () => {
       });
 
       toast.success('Business account created!');
-      navigate('/onboarding');
     } catch (err) {
       console.error(err);
       toast.error(err.response?.data?.message || 'Registration failed');
@@ -63,18 +68,13 @@ const Register = () => {
   };
 
   return (
-    // MAIN CONTAINER: Applied zoom style here as requested
-    // "zoom" property works in Chrome/Edge/Safari. 
-    // For Firefox support, one would typically use transform: scale(0.8), but zoom is more consistent for layout flow.
     <div
-      className="min-h-screen w-full flex bg-slate-950 font-sans selection:bg-indigo-500/30 overflow-x-hidden"
+      className="min-h-[125vh] w-full flex bg-slate-950 font-sans selection:bg-indigo-500/30 overflow-x-hidden"
       style={{ zoom: '80%' }}
     >
 
-      {/* LEFT SIDE - Form Area (Full width on mobile, Half on desktop) */}
       <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-6 sm:p-8 lg:p-12 relative z-10">
 
-        {/* Mobile Background Glow (Hidden on Desktop) */}
         <div className="lg:hidden absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
           <div className="absolute top-[-10%] right-[-10%] w-64 h-64 bg-indigo-600/20 rounded-full blur-[80px]" />
           <div className="absolute bottom-[-10%] left-[-10%] w-64 h-64 bg-purple-600/10 rounded-full blur-[80px]" />
