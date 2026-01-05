@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { 
-  LogIn, Mail, Lock, ArrowRight, 
-  Eye, EyeOff, ShieldCheck, CheckCircle2, TrendingUp 
+import {
+  LogIn, Mail, Lock, ArrowRight,
+  Eye, EyeOff, ShieldCheck, CheckCircle2, TrendingUp
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { motion } from 'framer-motion';
@@ -41,35 +41,37 @@ const Login = () => {
   };
 
   return (
-    // FIX APPLIED: Changed min-h-screen to min-h-[125vh]
-    // Explanation: Because zoom is 80%, we need 125% height to cover the full screen (125 * 0.8 = 100)
-    <div 
+    <div
       className="min-h-[125vh] w-full flex bg-slate-950 font-sans selection:bg-indigo-500/30 overflow-hidden"
       style={{ zoom: '80%' }}
     >
-      
+
       {/* LEFT SIDE - Form Area */}
       <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-6 sm:p-8 lg:p-12 relative z-10">
-        
-        {/* Mobile Background Glow (Hidden on Desktop) */}
+
         <div className="lg:hidden absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-             <div className="absolute top-[-10%] right-[-10%] w-64 h-64 bg-indigo-600/20 rounded-full blur-[80px]" />
-             <div className="absolute bottom-[-10%] left-[-10%] w-64 h-64 bg-purple-600/10 rounded-full blur-[80px]" />
+          <div className="absolute top-[-10%] right-[-10%] w-64 h-64 bg-indigo-600/20 rounded-full blur-[80px]" />
+          <div className="absolute bottom-[-10%] left-[-10%] w-64 h-64 bg-purple-600/10 rounded-full blur-[80px]" />
         </div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="w-full max-w-[420px] space-y-7 relative"
         >
           {/* Logo / Brand */}
-          <div className="flex items-center gap-2 mb-8">
-            <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/20 ring-1 ring-white/10">
-              <span className="font-bold text-base">C</span>
+          <div className="flex justify-center mb-6">
+            <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/20 ring-1 ring-white/10">
+                <span className="font-bold text-base">C</span>
+              </div>
+              <span className="text-2xl font-bold text-slate-100 tracking-tight">
+                CredFlow
+              </span>
             </div>
-            <span className="text-2xl font-bold text-slate-100 tracking-tight">CredFlow</span>
           </div>
+
 
           {/* Header */}
           <div>
@@ -83,7 +85,7 @@ const Login = () => {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
-            
+
             {/* Email Input */}
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-slate-300 ml-1">Work Email</label>
@@ -107,11 +109,11 @@ const Login = () => {
             <div className="space-y-1.5">
               <div className="flex justify-between items-center ml-1">
                 <label className="text-xs font-semibold text-slate-300">Password</label>
-                <Link 
-                    to="#" 
-                    className="text-xs font-medium text-indigo-400 hover:text-indigo-300 transition-colors"
-                  >
-                    Forgot password?
+                <Link
+                  to="#"
+                  className="text-xs font-medium text-indigo-400 hover:text-indigo-300 transition-colors"
+                >
+                  Forgot password?
                 </Link>
               </div>
               <div className="relative group">
@@ -162,8 +164,8 @@ const Login = () => {
             {/* Footer Text */}
             <p className="text-center text-xs text-slate-500 mt-6 font-medium">
               Don't have an account?{' '}
-              <Link 
-                to="/register" 
+              <Link
+                to="/register"
                 className="text-indigo-400 hover:text-indigo-300 font-bold hover:underline transition-all inline-flex items-center gap-1"
               >
                 Create account
@@ -183,13 +185,13 @@ const Login = () => {
 
       {/* RIGHT SIDE - Art & Social Proof */}
       <div className="hidden lg:flex w-1/2 relative bg-[#0B0F19] overflow-hidden items-center justify-center border-l border-slate-800/50">
-        
+
         {/* Background Gradients */}
         <div className="absolute top-[-20%] right-[-20%] w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" style={{ animationDuration: '4s' }} />
         <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[100px] mix-blend-screen" />
-        
+
         {/* Content Container */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2, duration: 0.6 }}
@@ -211,7 +213,7 @@ const Login = () => {
                 MC
               </div>
               <div>
-                <h4 className="text-white font-bold text-sm">Michael Chen</h4>
+                <h4 className="text-white font-bold text-sm">Ananya Pandey</h4>
                 <p className="text-slate-400 text-xs font-medium">Director of Finance</p>
               </div>
             </div>
@@ -222,14 +224,14 @@ const Login = () => {
             <div className="w-2 h-2 rounded-full bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.5)]" />
             <span className="text-xs text-slate-200 font-bold tracking-wide">99.9% Uptime</span>
           </div>
-          
+
           <div className="absolute -left-8 bottom-[-30px] bg-slate-800/80 backdrop-blur-md border border-slate-700 py-2.5 px-5 rounded-full flex items-center gap-2.5 shadow-xl animate-bounce-slow delay-700 hover:scale-105 transition-transform cursor-default">
-             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
             <span className="text-xs text-slate-200 font-bold tracking-wide">SOC2 Compliant</span>
           </div>
 
         </motion.div>
-        
+
         {/* Grid Pattern Overlay */}
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none" />
       </div>

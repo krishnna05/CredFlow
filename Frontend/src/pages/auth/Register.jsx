@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { 
-  UserPlus, Mail, Lock, User, ArrowRight, 
-  Eye, EyeOff, ShieldCheck, CheckCircle2, Star 
+import {
+  UserPlus, Mail, Lock, User, ArrowRight,
+  Eye, EyeOff, ShieldCheck, CheckCircle2, Star
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { motion } from 'framer-motion';
@@ -33,8 +33,8 @@ const Register = () => {
     setError('');
 
     if (formData.password.length < 8) {
-        setError('Password must be at least 8 characters');
-        return;
+      setError('Password must be at least 8 characters');
+      return;
     }
 
     if (formData.password !== formData.confirmPassword) {
@@ -66,33 +66,38 @@ const Register = () => {
     // MAIN CONTAINER: Applied zoom style here as requested
     // "zoom" property works in Chrome/Edge/Safari. 
     // For Firefox support, one would typically use transform: scale(0.8), but zoom is more consistent for layout flow.
-    <div 
+    <div
       className="min-h-screen w-full flex bg-slate-950 font-sans selection:bg-indigo-500/30 overflow-x-hidden"
       style={{ zoom: '80%' }}
     >
-      
+
       {/* LEFT SIDE - Form Area (Full width on mobile, Half on desktop) */}
       <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-6 sm:p-8 lg:p-12 relative z-10">
-        
+
         {/* Mobile Background Glow (Hidden on Desktop) */}
         <div className="lg:hidden absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-             <div className="absolute top-[-10%] right-[-10%] w-64 h-64 bg-indigo-600/20 rounded-full blur-[80px]" />
-             <div className="absolute bottom-[-10%] left-[-10%] w-64 h-64 bg-purple-600/10 rounded-full blur-[80px]" />
+          <div className="absolute top-[-10%] right-[-10%] w-64 h-64 bg-indigo-600/20 rounded-full blur-[80px]" />
+          <div className="absolute bottom-[-10%] left-[-10%] w-64 h-64 bg-purple-600/10 rounded-full blur-[80px]" />
         </div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="w-full max-w-[420px] space-y-6 relative"
         >
           {/* Logo / Brand */}
-          <div className="flex items-center gap-2 mb-6">
-            <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/20 ring-1 ring-white/10">
-              <span className="font-bold text-base">C</span>
+          <div className="flex justify-center mb-6">
+            <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/20 ring-1 ring-white/10">
+                <span className="font-bold text-base">C</span>
+              </div>
+              <span className="text-2xl font-bold text-slate-100 tracking-tight">
+                CredFlow
+              </span>
             </div>
-            <span className="text-2xl font-bold text-slate-100 tracking-tight">CredFlow</span>
           </div>
+
 
           {/* Header */}
           <div>
@@ -106,7 +111,7 @@ const Register = () => {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            
+
             {/* Name Input */}
             <div className="space-y-1">
               <label className="text-xs font-semibold text-slate-300 ml-1">Full Name</label>
@@ -117,7 +122,7 @@ const Register = () => {
                 <input
                   name="name"
                   type="text"
-                  placeholder="John Doe"
+                  placeholder="Your name"
                   value={formData.name}
                   onChange={handleChange}
                   required
@@ -145,7 +150,7 @@ const Register = () => {
               </div>
             </div>
 
-            {/* Password Row (Stacks on very small screens, side-by-side on larger) */}
+            {/* Password Row */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1">
                 <label className="text-xs font-semibold text-slate-300 ml-1">Password</label>
@@ -185,9 +190,8 @@ const Register = () => {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     required
-                    className={`w-full bg-slate-900/50 border text-slate-200 text-sm rounded-xl pl-11 pr-4 py-3.5 focus:outline-none focus:ring-2 transition-all placeholder:text-slate-600 hover:border-slate-700 hover:bg-slate-900/80 ${
-                      error ? 'border-red-500/50 focus:ring-red-500/20' : 'border-slate-800 focus:ring-indigo-500/50 focus:border-indigo-500'
-                    }`}
+                    className={`w-full bg-slate-900/50 border text-slate-200 text-sm rounded-xl pl-11 pr-4 py-3.5 focus:outline-none focus:ring-2 transition-all placeholder:text-slate-600 hover:border-slate-700 hover:bg-slate-900/80 ${error ? 'border-red-500/50 focus:ring-red-500/20' : 'border-slate-800 focus:ring-indigo-500/50 focus:border-indigo-500'
+                      }`}
                   />
                 </div>
               </div>
@@ -222,8 +226,8 @@ const Register = () => {
             {/* Footer Text */}
             <p className="text-center text-xs text-slate-500 mt-6 font-medium">
               Already have an account?{' '}
-              <Link 
-                to="/login" 
+              <Link
+                to="/login"
                 className="text-indigo-400 hover:text-indigo-300 font-bold hover:underline transition-all"
               >
                 Log in
@@ -240,15 +244,15 @@ const Register = () => {
         </motion.div>
       </div>
 
-      {/* RIGHT SIDE - Art & Social Proof (Hidden on Mobile) */}
+      {/* RIGHT SIDE - Art & Social Proof */}
       <div className="hidden lg:flex w-1/2 relative bg-[#0B0F19] overflow-hidden items-center justify-center border-l border-slate-800/50">
-        
+
         {/* Background Gradients */}
         <div className="absolute top-[-20%] right-[-20%] w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" style={{ animationDuration: '4s' }} />
         <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[100px] mix-blend-screen" />
-        
+
         {/* Content Container */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2, duration: 0.6 }}
@@ -270,7 +274,7 @@ const Register = () => {
                 JD
               </div>
               <div>
-                <h4 className="text-white font-bold text-sm">Jane Davis</h4>
+                <h4 className="text-white font-bold text-sm">Ayushman Khurana</h4>
                 <p className="text-slate-400 text-xs font-medium">CFO at TechGrowth Inc.</p>
               </div>
             </div>
@@ -281,14 +285,14 @@ const Register = () => {
             <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
             <span className="text-xs text-slate-200 font-bold tracking-wide">Real-time Analytics</span>
           </div>
-          
+
           <div className="absolute -left-8 bottom-[-30px] bg-slate-800/80 backdrop-blur-md border border-slate-700 py-2.5 px-5 rounded-full flex items-center gap-2.5 shadow-xl animate-bounce-slow delay-700 hover:scale-105 transition-transform cursor-default">
-             <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400" />
+            <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400" />
             <span className="text-xs text-slate-200 font-bold tracking-wide">No credit card required</span>
           </div>
 
         </motion.div>
-        
+
         {/* Grid Pattern Overlay */}
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none" />
       </div>
