@@ -59,7 +59,6 @@ const Register = () => {
       });
 
       toast.success('Business account created!');
-      navigate('/onboarding');
     } catch (err) {
       console.error(err);
       toast.error(err.response?.data?.message || 'Registration failed');
