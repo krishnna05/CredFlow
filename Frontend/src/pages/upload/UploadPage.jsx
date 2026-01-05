@@ -73,7 +73,7 @@ const UploadPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F6F8FF]">
+    <div className="min-h-screen bg-[#EEF2FF]">
       <div className="absolute inset-0 z-0 opacity-[0.05]"
         style={{ backgroundImage: 'radial-gradient(#4f46e5 1px, transparent 1px)', backgroundSize: '24px 24px' }}>
       </div>
@@ -91,7 +91,6 @@ const UploadPage = () => {
 
           <div className="flex items-start justify-between">
             <div>
-              {/* <h1 className="text-xl font-bold text-slate-900 tracking-tight">Upload New Invoice</h1> */}
               <p className="text-slate-500 mt-1 text-sm">Upload your invoice details for AI-powered credit assessment.</p>
             </div>
           </div>
@@ -184,20 +183,21 @@ const UploadPage = () => {
                 </div>
               </div>
 
-              <div className="px-6 py-4 bg-slate-50 border-t border-slate-200 rounded-b-xl flex items-center justify-end gap-3">
+              {/* Updated Footer Section with Smaller Buttons */}
+              <div className="px-6 py-3 bg-slate-50 border-t border-slate-200 rounded-b-xl flex items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={handleCancelKey}
-                  className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 hover:shadow-sm border border-transparent hover:border-slate-200 rounded-lg transition-all"
+                  className="px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-slate-800 hover:shadow-sm border border-transparent hover:border-slate-200 rounded-lg transition-all"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-6 py-2 bg-indigo-600 hover:bg-indigo-800 text-white text-sm font-semibold rounded-lg shadow-sm hover:shadow focus:ring-4 focus:ring-indigo-600/20 transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2"
+                  className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-800 text-white text-xs font-semibold rounded-lg shadow-sm hover:shadow focus:ring-4 focus:ring-indigo-600/20 transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2"
                 >
-                  {loading && <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
+                  {loading && <div className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
                   {loading ? 'Processing...' : 'Analyze & Upload'}
                 </button>
               </div>

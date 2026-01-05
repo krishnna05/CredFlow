@@ -15,7 +15,6 @@ const Dashboard = () => {
   const [activities, setActivities] = useState([]); 
   const [loading, setLoading] = useState(true);
   
-  // New state for the filter
   const [filterPeriod, setFilterPeriod] = useState('12m');
 
   useEffect(() => {
@@ -157,7 +156,7 @@ const Dashboard = () => {
           
           {/* CHART SECTION */}
           <div className="lg:col-span-2 bg-white rounded-xl shadow-[0_2px_10px_-4px_rgba(6,81,237,0.1)] border border-slate-100 p-4 flex flex-col min-h-[340px]">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-0 mb-4">
               <div>
                 <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
                   <TrendingUp className="h-4 w-4 text-indigo-500" />
@@ -167,11 +166,11 @@ const Dashboard = () => {
               </div>
               
               {/* Functional Filter Dropdown */}
-              <div className="relative">
+              <div className="relative w-full sm:w-auto">
                 <select 
                   value={filterPeriod}
                   onChange={handleFilterChange}
-                  className="appearance-none pl-8 pr-6 py-1 bg-slate-50 border border-slate-200 rounded text-[10px] font-medium text-slate-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer hover:bg-slate-100 transition-colors"
+                  className="appearance-none w-full sm:w-auto pl-8 pr-6 py-1.5 bg-slate-50 border border-slate-200 rounded text-[10px] font-medium text-slate-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer hover:bg-slate-100 transition-colors"
                 >
                   <option value="12m">Last 12 Months</option>
                   <option value="6m">Last 6 Months</option>

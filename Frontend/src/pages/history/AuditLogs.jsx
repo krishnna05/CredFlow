@@ -6,26 +6,26 @@ import { useState } from 'react';
 const getTypeStyles = (type) => {
   switch (type) {
     case 'invoice':
-      return { 
-        icon: <FileText className="w-4 h-4 text-blue-600" />, 
+      return {
+        icon: <FileText className="w-4 h-4 text-blue-600" />,
         bg: 'bg-blue-50 border-blue-100',
         text: 'text-blue-700'
       };
     case 'fraud':
-      return { 
-        icon: <ShieldAlert className="w-4 h-4 text-rose-600" />, 
+      return {
+        icon: <ShieldAlert className="w-4 h-4 text-rose-600" />,
         bg: 'bg-rose-50 border-rose-100',
         text: 'text-rose-700'
       };
     case 'repayment':
-      return { 
-        icon: <Wallet className="w-4 h-4 text-emerald-600" />, 
+      return {
+        icon: <Wallet className="w-4 h-4 text-emerald-600" />,
         bg: 'bg-emerald-50 border-emerald-100',
         text: 'text-emerald-700'
       };
     default:
-      return { 
-        icon: <Activity className="w-4 h-4 text-violet-600" />, 
+      return {
+        icon: <Activity className="w-4 h-4 text-violet-600" />,
         bg: 'bg-violet-50 border-violet-100',
         text: 'text-violet-700'
       };
@@ -34,15 +34,15 @@ const getTypeStyles = (type) => {
 
 // Helper for modern badge styling
 const getStatusStyles = (action) => {
-  if (action.includes('UPLOAD') || action.includes('CREATED')) 
+  if (action.includes('UPLOAD') || action.includes('CREATED'))
     return 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-700/10';
-  if (action.includes('APPROVED') || action.includes('SUCCESS')) 
+  if (action.includes('APPROVED') || action.includes('SUCCESS'))
     return 'bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20';
-  if (action.includes('REJECTED') || action.includes('FAILED') || action.includes('FRAUD')) 
+  if (action.includes('REJECTED') || action.includes('FAILED') || action.includes('FRAUD'))
     return 'bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/10';
-  if (action.includes('WARNING') || action.includes('PENDING')) 
+  if (action.includes('WARNING') || action.includes('PENDING'))
     return 'bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-600/20';
-  
+
   return 'bg-slate-50 text-slate-600 ring-1 ring-inset ring-slate-500/10';
 };
 
@@ -81,7 +81,7 @@ const AuditLogs = () => {
         </div>
         <h3 className="text-sm font-semibold text-gray-900">Failed to load logs</h3>
         <p className="text-xs text-gray-500 mt-1 mb-4">We couldn't fetch the latest data.</p>
-        <button 
+        <button
           onClick={refetch}
           className="px-4 py-2 text-xs font-medium text-white bg-gray-900 rounded-lg hover:bg-gray-800 transition-colors"
         >
@@ -93,8 +93,8 @@ const AuditLogs = () => {
 
   const filteredLogs = logs?.filter((log) => {
     const matchesFilter = filter === 'all' || log.entityType === filter;
-    const matchesSearch = log.message.toLowerCase().includes(search.toLowerCase()) || 
-                          log.action.toLowerCase().includes(search.toLowerCase());
+    const matchesSearch = log.message.toLowerCase().includes(search.toLowerCase()) ||
+      log.action.toLowerCase().includes(search.toLowerCase());
     return matchesFilter && matchesSearch;
   }) || [];
 
@@ -102,27 +102,32 @@ const AuditLogs = () => {
 
   return (
     <div className="w-full max-w-[1600px] mx-auto space-y-5 animate-in fade-in duration-500">
-      
+
       {/* HEADER SECTION */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 px-1">
         <div>
           {/* UPDATED: Reduced font size to text-2xl */}
-          <h1 className="text-2xl font-bold text-gray-900 tracking-tight flex items-center gap-3">
-            Audit Trail
-            
-            {/* UPDATED: Changed rounded-full to rounded-md */}
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-gradient-to-b from-white to-gray-50 border border-gray-200 text-gray-600 text-[11px] font-bold shadow-sm ring-1 ring-gray-900/5">
-              <Sparkles className="w-3 h-3 text-indigo-500" />
+          <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-3">
+            Event Log
+
+            <span className="inline-flex items-center gap-1 px-5 py-[5px] rounded-md
+  bg-gradient-to-b from-white to-gray-50
+  border border-gray-200
+  text-gray-600 text-[10px] font-semibold
+  shadow-sm ring-1 ring-gray-900/5 leading-none">
+
+              <Sparkles className="w-2.5 h-2.5 text-indigo-500" />
               {logs?.length || 0} Events
             </span>
+
           </h1>
-          <p className="text-xs text-gray-500 mt-2 max-w-lg font-medium">
+          <p className="text-xs text-gray-200 mt-2 max-w-lg font-medium">
             Monitor sensitive actions, system events, and security alerts across your organization.
           </p>
         </div>
-        
+
         <div className="flex items-center gap-2">
-           <button className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 text-gray-600 text-xs font-medium rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-all shadow-sm">
+          <button className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 text-gray-600 text-xs font-medium rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-all shadow-sm">
             <Download className="w-3.5 h-3.5" />
             Export CSV
           </button>
@@ -131,10 +136,10 @@ const AuditLogs = () => {
 
       {/* MAIN CARD */}
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        
+
         {/* CONTROLS BAR */}
         <div className="p-3 border-b border-gray-100 bg-gray-50/50 flex flex-col md:flex-row gap-3 justify-between items-center">
-          
+
           {/* TAB FILTERS */}
           <div className="flex p-1 w-full md:w-auto overflow-x-auto no-scrollbar gap-1">
             {categories.map((type) => (
@@ -143,8 +148,8 @@ const AuditLogs = () => {
                 onClick={() => setFilter(type)}
                 className={`
                   relative px-4 py-2 text-xs font-bold rounded-lg capitalize whitespace-nowrap transition-all duration-200 ease-out
-                  ${filter === type 
-                    ? 'bg-white text-indigo-600 shadow-sm ring-1 ring-gray-200' 
+                  ${filter === type
+                    ? 'bg-white text-indigo-600 shadow-sm ring-1 ring-gray-200'
                     : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100/50'}
                 `}
               >
@@ -195,15 +200,15 @@ const AuditLogs = () => {
                   const statusClass = getStatusStyles(log.action);
 
                   return (
-                    <tr 
-                      key={log._id} 
+                    <tr
+                      key={log._id}
                       className="group hover:bg-indigo-50/30 transition-colors duration-150"
                     >
                       {/* Timestamp */}
                       <td className="px-4 py-2.5 whitespace-nowrap">
                         <div className="flex flex-col">
                           <span className="text-xs font-medium text-gray-900">
-                             {new Date(log.createdAt).toLocaleDateString()}
+                            {new Date(log.createdAt).toLocaleDateString()}
                           </span>
                           <span className="text-[10px] text-gray-400 font-mono">
                             {new Date(log.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -250,8 +255,8 @@ const AuditLogs = () => {
                       <p className="text-xs text-gray-500 mt-1">
                         Try adjusting your search or filter criteria.
                       </p>
-                      <button 
-                        onClick={() => {setFilter('all'); setSearch('');}}
+                      <button
+                        onClick={() => { setFilter('all'); setSearch(''); }}
                         className="mt-3 text-xs font-medium text-indigo-600 hover:text-indigo-700"
                       >
                         Clear filters
@@ -263,16 +268,16 @@ const AuditLogs = () => {
             </tbody>
           </table>
         </div>
-        
+
         {/* FOOTER PAGINATION */}
         <div className="px-4 py-3 border-t border-gray-100 bg-gray-50 flex items-center justify-between">
-            <span className="text-[10px] text-gray-500">
-                Showing {filteredLogs.length} results
-            </span>
-            <div className="flex gap-1">
-                <button disabled className="px-2 py-1 text-[10px] font-medium text-gray-400 bg-white border border-gray-200 rounded hover:bg-gray-50 disabled:opacity-50">Previous</button>
-                <button className="px-2 py-1 text-[10px] font-medium text-gray-600 bg-white border border-gray-200 rounded hover:bg-gray-50">Next</button>
-            </div>
+          <span className="text-[10px] text-gray-500">
+            Showing {filteredLogs.length} results
+          </span>
+          <div className="flex gap-1">
+            <button disabled className="px-2 py-1 text-[10px] font-medium text-gray-400 bg-white border border-gray-200 rounded hover:bg-gray-50 disabled:opacity-50">Previous</button>
+            <button className="px-2 py-1 text-[10px] font-medium text-gray-600 bg-white border border-gray-200 rounded hover:bg-gray-50">Next</button>
+          </div>
         </div>
       </div>
     </div>

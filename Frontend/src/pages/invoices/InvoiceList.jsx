@@ -109,7 +109,7 @@ const InvoiceList = () => {
   return (
     <div className="space-y-6 animate-in fade-in duration-500 max-w-7xl mx-auto">
 
-      <div className="relative bg-gradient-to-r from-indigo-950 via-purple-950 to-indigo-950 shadow-xl border border-indigo-900/50">
+      <div className="relative bg-slate-950 bg-gradient-to-r from-indigo-950 via-purple-950 to-indigo-950 shadow-xl border border-indigo-900/50">
 
         <div className="relative p-5 space-y-6">
           <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
@@ -121,77 +121,81 @@ const InvoiceList = () => {
             </div>
 
             {/* Compact Actions Toolbar */}
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
+              
               {/* Search Bar */}
-              <div className="relative group">
+              <div className="relative group w-full sm:w-auto">
                 <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-indigo-300 group-focus-within:text-white transition-colors" />
                 <input
                   type="text"
                   placeholder="Search buyer or invoice #"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-8 pr-3 py-1.5 text-xs bg-indigo-900/50 border border-indigo-800/50 rounded-lg text-white placeholder-indigo-400 focus:bg-indigo-900/80 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-800/50 focus:outline-none transition-all w-full md:w-56 shadow-sm"
+                  className="pl-8 pr-3 h-8 text-xs bg-indigo-900/50 border border-indigo-800/50 rounded-lg text-white placeholder-indigo-400 focus:bg-indigo-900/80 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-800/50 focus:outline-none transition-all w-full sm:w-56 shadow-sm"
                 />
               </div>
 
-              {/* Filter Button */}
-              <div className="relative z-50" ref={filterRef}>
-                <button
-                  onClick={() => setIsFilterOpen(!isFilterOpen)}
-                  className={`h-8 px-3 flex items-center gap-1.5 text-xs font-semibold rounded-lg border transition-all shadow-sm ${filterStatus !== 'ALL'
-                    ? 'bg-white text-indigo-900 border-white hover:bg-indigo-50'
-                    : 'bg-indigo-900/50 text-indigo-200 border-indigo-800/50 hover:bg-indigo-900/80'
-                    }`}
-                >
-                  <Filter className="w-3.5 h-3.5" />
-                  {filterStatus === 'ALL' ? 'Filter' : filterStatus}
-                  {filterStatus !== 'ALL' && (
-                    <X
-                      className="w-3 h-3 ml-1 p-0.5 rounded-full bg-indigo-100 text-indigo-900 hover:bg-indigo-200"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setFilterStatus('ALL');
-                      }}
-                    />
-                  )}
-                </button>
-
-                {/* Dropdown Menu */}
-                {isFilterOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-40 bg-white rounded-lg shadow-xl border border-indigo-100 overflow-hidden py-1 animate-in fade-in zoom-in-95 duration-200 ring-1 ring-black/5">
-                    <div className="px-3 py-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-wider bg-gray-50/50 border-b border-gray-100">
-                      Filter Status
-                    </div>
-                    {['ALL', 'APPROVED', 'PENDING', 'REJECTED'].map((status) => (
-                      <button
-                        key={status}
-                        onClick={() => {
-                          setFilterStatus(status);
-                          setIsFilterOpen(false);
+              {/* Action Buttons Wrapper */}
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <div className="relative z-50 flex-1 sm:flex-none" ref={filterRef}>
+                  <button
+                    onClick={() => setIsFilterOpen(!isFilterOpen)}
+                    className={`h-8 px-3 w-full sm:w-auto flex items-center justify-center gap-1.5 text-xs font-semibold rounded-lg border transition-all shadow-sm ${filterStatus !== 'ALL'
+                      ? 'bg-white text-indigo-900 border-white hover:bg-indigo-50'
+                      : 'bg-indigo-900/50 text-indigo-200 border-indigo-800/50 hover:bg-indigo-900/80'
+                      }`}
+                  >
+                    <Filter className="w-3.5 h-3.5" />
+                    {filterStatus === 'ALL' ? 'Filter' : filterStatus}
+                    {filterStatus !== 'ALL' && (
+                      <X
+                        className="w-3 h-3 ml-1 p-0.5 rounded-full bg-indigo-100 text-indigo-900 hover:bg-indigo-200"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setFilterStatus('ALL');
                         }}
-                        className="w-full text-left px-3 py-2 text-xs font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center justify-between transition-colors"
-                      >
-                        {status.charAt(0) + status.slice(1).toLowerCase()}
-                        {filterStatus === status && <Check className="w-3 h-3 text-indigo-600" />}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
+                      />
+                    )}
+                  </button>
 
-              <button
-                onClick={() => navigate('/upload')}
-                className="h-8 px-4 flex items-center gap-1.5 bg-white text-indigo-900 hover:bg-indigo-50 font-bold text-xs rounded-lg shadow-md transition-all active:scale-95"
-              >
-                <Plus className="w-3.5 h-3.5" /> New Invoice
-              </button>
+                  {/* Dropdown Menu */}
+                  {isFilterOpen && (
+                    <div className="absolute right-0 top-full mt-2 w-40 bg-white rounded-lg shadow-xl border border-indigo-100 overflow-hidden py-1 animate-in fade-in zoom-in-95 duration-200 ring-1 ring-black/5">
+                      <div className="px-3 py-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-wider bg-gray-50/50 border-b border-gray-100">
+                        Filter Status
+                      </div>
+                      {['ALL', 'APPROVED', 'PENDING', 'REJECTED'].map((status) => (
+                        <button
+                          key={status}
+                          onClick={() => {
+                            setFilterStatus(status);
+                            setIsFilterOpen(false);
+                          }}
+                          className="w-full text-left px-3 py-2 text-xs font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center justify-between transition-colors"
+                        >
+                          {status.charAt(0) + status.slice(1).toLowerCase()}
+                          {filterStatus === status && <Check className="w-3 h-3 text-indigo-600" />}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* New Invoice Button */}
+                <button
+                  onClick={() => navigate('/upload')}
+                  className="h-8 px-4 flex-1 sm:flex-none flex items-center justify-center gap-1.5 bg-white text-indigo-900 hover:bg-indigo-50 font-bold text-xs rounded-lg shadow-md transition-all active:scale-95"
+                >
+                  <Plus className="w-3.5 h-3.5" /> New Invoice
+                </button>
+              </div>
             </div>
           </div>
 
-          {/* Stats Cards - Updated to White with Indigo Tint */}
+          {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 relative z-0">
             {/* Card 1 - Total Value */}
-            <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-3 shadow-lg hover:bg-indigo-50 transition-colors duration-200 group">
+            <div className="bg-white border border-indigo-100 rounded-xl p-3 shadow-lg hover:bg-indigo-50 transition-colors duration-200 group">
               <div className="flex items-center gap-2 mb-2">
                 <div className="p-1.5 bg-indigo-100 text-indigo-600 rounded-md group-hover:bg-indigo-200 transition-colors">
                   <DollarSign className="w-3.5 h-3.5" />
@@ -202,7 +206,7 @@ const InvoiceList = () => {
             </div>
 
             {/* Card 2 - Financed */}
-            <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-3 shadow-lg hover:bg-indigo-50 transition-colors duration-200 group">
+            <div className="bg-white border border-indigo-100 rounded-xl p-3 shadow-lg hover:bg-indigo-50 transition-colors duration-200 group">
               <div className="flex items-center gap-2 mb-2">
                 <div className="p-1.5 bg-emerald-100 text-emerald-600 rounded-md group-hover:bg-emerald-200 transition-colors">
                   <TrendingUp className="w-3.5 h-3.5" />
@@ -213,7 +217,7 @@ const InvoiceList = () => {
             </div>
 
             {/* Card 3 - Pending */}
-            <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-3 shadow-lg hover:bg-indigo-50 transition-colors duration-200 group">
+            <div className="bg-white border border-indigo-100 rounded-xl p-3 shadow-lg hover:bg-indigo-50 transition-colors duration-200 group">
               <div className="flex items-center gap-2 mb-2">
                 <div className="p-1.5 bg-amber-100 text-amber-600 rounded-md group-hover:bg-amber-200 transition-colors">
                   <AlertCircle className="w-3.5 h-3.5" />
