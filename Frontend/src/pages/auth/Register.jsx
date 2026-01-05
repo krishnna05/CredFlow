@@ -59,6 +59,7 @@ const Register = () => {
       });
 
       toast.success('Business account created!');
+      navigate('/onboarding');
     } catch (err) {
       console.error(err);
       toast.error(err.response?.data?.message || 'Registration failed');
@@ -271,7 +272,7 @@ const Register = () => {
 
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-slate-700 to-slate-600 border border-slate-500 flex items-center justify-center text-xs font-bold text-white ring-2 ring-slate-900">
-                JD
+                AK
               </div>
               <div>
                 <h4 className="text-white font-bold text-sm">Ayushman Khurana</h4>

@@ -37,7 +37,7 @@ const Login = () => {
     try {
       await login(formData.email, formData.password);
       toast.success('Welcome back!');
-      // navigation handled by useEffect
+      navigate('/dashboard');
     } catch (error) {
       console.error(error);
       toast.error(error.response?.data?.message || 'Invalid credentials');
@@ -216,7 +216,7 @@ const Login = () => {
 
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 border border-slate-500 flex items-center justify-center text-xs font-bold text-white ring-2 ring-slate-900">
-                MC
+                AP
               </div>
               <div>
                 <h4 className="text-white font-bold text-sm">Ananya Pandey</h4>
