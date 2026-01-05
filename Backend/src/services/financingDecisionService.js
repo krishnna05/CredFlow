@@ -1,7 +1,6 @@
 exports.decideFinancing = (invoice) => {
   const notes = [];
 
-  // Hard rejections
   if (invoice.validationStatus !== "valid") {
     return {
       status: "rejected",
@@ -26,7 +25,6 @@ exports.decideFinancing = (invoice) => {
     notes.push("Medium risk invoice (60% financing)");
   }
 
-  // Credit grade bonus
   if (invoice.creditGrade === "A") {
     percentage += 0.05;
     notes.push("Excellent credit bonus (+5%)");
@@ -35,7 +33,6 @@ exports.decideFinancing = (invoice) => {
   let financedAmount =
     invoice.invoiceAmount * percentage;
 
-  // Platform exposure cap
   if (financedAmount > 4000000) {
     financedAmount = 4000000;
     notes.push("Capped by platform exposure limit");
@@ -45,7 +42,7 @@ exports.decideFinancing = (invoice) => {
 
   return {
     status: "approved",
-    financedAmount,
+    financedAmount: Number(financedAmount.toFixed(2)),
     platformFee,
     notes,
   };

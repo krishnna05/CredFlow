@@ -18,7 +18,7 @@ const StatCard = ({ title, value, DQ, trend, trendValue, icon: Icon, color }) =>
   };
 
   return (
-    <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-lg shadow-slate-200/50 hover:shadow-xl hover:shadow-indigo-100/40 transition-all duration-300">
+    <div className="bg-[#F8FAFC] p-5 rounded-2xl border border-[#E2E8F0] shadow-sm shadow-slate-200/50 hover:shadow-xl hover:shadow-indigo-100/40 transition-all duration-300">
       <div className="flex items-start justify-between mb-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">{title}</p>

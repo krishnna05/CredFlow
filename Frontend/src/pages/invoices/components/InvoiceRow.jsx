@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom';
-import { ChevronRight, Building2 } from 'lucide-react';
+import { ChevronRight, Building2, Trash2 } from 'lucide-react';
 import Badge from '../../../components/common/Badge';
 import { formatCurrency } from '../../../utils/formatCurrency';
 import { formatDate } from '../../../utils/formatDate';
 
-const InvoiceRow = ({ invoice }) => {
+const InvoiceRow = ({ invoice, onDelete }) => {
   const navigate = useNavigate();
 
   return (
@@ -55,9 +55,21 @@ const InvoiceRow = ({ invoice }) => {
       </td>
 
       <td className="py-3 pl-3 pr-5 text-right">
-        <button className="p-1.5 rounded-md text-gray-300 hover:text-primary hover:bg-gray-200 transition-all">
-          <ChevronRight className="w-4 h-4" />
-        </button>
+        <div className="flex justify-end gap-2">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete(invoice._id);
+            }}
+            className="p-1.5 rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all"
+            title="Delete Invoice"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+          <button className="p-1.5 rounded-md text-gray-300 hover:text-primary hover:bg-gray-200 transition-all">
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
       </td>
     </tr>
   );

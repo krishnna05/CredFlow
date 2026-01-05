@@ -15,6 +15,11 @@ const invoiceService = {
     return response.data;
   },
 
+  delete: async (id) => {
+    const response = await axiosInstance.delete(`/invoices/${id}`);
+    return response.data;
+  },
+
   getExplanation: async (id) => {
     const response = await axiosInstance.get(`/assistant/invoice/${id}`);
     return response.data;

@@ -60,7 +60,6 @@ const Dashboard = () => {
 
   const handleFilterChange = (e) => {
     setFilterPeriod(e.target.value);
-    // You can trigger a data refetch here based on the new period if needed
     console.log(`Filter changed to: ${e.target.value}`);
   };
 
@@ -119,7 +118,7 @@ const Dashboard = () => {
       </div>
 
       {/* MAIN CONTENT CONTAINER */}
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative z-20 space-y-4">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-6 -mt-12 relative z-20 space-y-4">
         
         {/* STATS GRID */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">

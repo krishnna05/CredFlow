@@ -29,7 +29,7 @@ const StatCard = ({ title, value, icon: Icon, trend, trendValue, trendLabel }) =
       </div>
 
       <div className="relative z-10">
-        <h3 className="text-slate-500 text-xs font-semibold uppercase tracking-wider mb-1">{title}</h3>
+        <h3 className="text-slate-600 text-[10px] font-semibold uppercase tracking-wider mb-1">{title}</h3>
         <div className="text-xl font-bold text-slate-800 tracking-tight">{value}</div>
         {trendLabel && (
           <p className="text-slate-400 text-[10px] mt-1 font-medium">{trendLabel}</p>

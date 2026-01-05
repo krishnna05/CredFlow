@@ -26,3 +26,9 @@ build/
 # IDE / Editor
 .vscode/
 .idea/
+
+# Test coverage
+coverage/
+lcov-report/
+coverage-final.json
+lcov.info
