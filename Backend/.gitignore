@@ -32,3 +32,6 @@ coverage/
 lcov-report/
 coverage-final.json
 lcov.info
+
+credentials/
+*.json

@@ -2,15 +2,22 @@ const multer = require("multer");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const cloudinary = require("../config/cloudinary");
 
-const storage = new CloudinaryStorage({
+// 1. Cloudinary Storage 
+const cloudStorage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: "credflow/invoices",
-    resource_type: "raw", 
-    allowed_formats: ["pdf"],
+    resource_type: "auto", 
+    allowed_formats: ["pdf", "jpg", "png", "jpeg"],
   },
 });
 
-const upload = multer({ storage });
+const memoryStorage = multer.memoryStorage();
 
-module.exports = upload;
+const uploadCloud = multer({ storage: cloudStorage });
+const uploadMemory = multer({ 
+  storage: memoryStorage,
+  limits: { fileSize: 5 * 1024 * 1024 } 
+});
+
+module.exports = { uploadCloud, uploadMemory };

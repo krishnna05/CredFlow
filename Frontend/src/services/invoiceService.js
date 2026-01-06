@@ -6,12 +6,16 @@ const invoiceService = {
     return response.data;
   },
 
+  analyze: async (file) => {
+    const formData = new FormData();
+    formData.append('invoicePdf', file);
+
+    const response = await axiosInstance.post('/invoices/analyze', formData);
+    return response.data;
+  },
+
   upload: async (formData) => {
-    const response = await axiosInstance.post('/invoices', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    const response = await axiosInstance.post('/invoices', formData);
     return response.data;
   },
 

@@ -1,4 +1,4 @@
-import { FileText, ShieldAlert, Wallet, Activity, Search, Filter, ArrowDownUp, Download, Sparkles } from 'lucide-react';
+import { FileText, ShieldAlert, Wallet, Activity, Search, Filter, ArrowDownUp, Download, Sparkles, RefreshCw } from 'lucide-react';
 import useFetch from '../../hooks/useFetch';
 import { useState } from 'react';
 
@@ -51,46 +51,6 @@ const AuditLogs = () => {
   const [filter, setFilter] = useState('all');
   const [search, setSearch] = useState('');
 
-  // SKELETON LOADING
-  if (loading) {
-    return (
-      <div className="max-w-7xl mx-auto p-4 space-y-6">
-        <div className="flex justify-between items-center">
-          <div className="h-10 w-48 bg-gray-200 rounded animate-pulse" />
-          <div className="h-8 w-24 bg-gray-200 rounded animate-pulse" />
-        </div>
-        <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-4 space-y-4">
-          <div className="flex gap-4 mb-6">
-            <div className="h-10 w-64 bg-gray-100 rounded-lg animate-pulse" />
-            <div className="h-10 w-full bg-gray-100 rounded-lg animate-pulse" />
-          </div>
-          {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="h-12 bg-gray-50 rounded-lg animate-pulse" />
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  // ERROR STATE
-  if (error) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] text-center p-6 bg-white rounded-xl border border-dashed border-red-200">
-        <div className="p-3 bg-red-50 rounded-full mb-3">
-          <ShieldAlert className="w-6 h-6 text-red-500" />
-        </div>
-        <h3 className="text-sm font-semibold text-gray-900">Failed to load logs</h3>
-        <p className="text-xs text-gray-500 mt-1 mb-4">We couldn't fetch the latest data.</p>
-        <button
-          onClick={refetch}
-          className="px-4 py-2 text-xs font-medium text-white bg-gray-900 rounded-lg hover:bg-gray-800 transition-colors"
-        >
-          Try Again
-        </button>
-      </div>
-    );
-  }
-
   const filteredLogs = logs?.filter((log) => {
     const matchesFilter = filter === 'all' || log.entityType === filter;
     const matchesSearch = log.message.toLowerCase().includes(search.toLowerCase()) ||
@@ -100,33 +60,151 @@ const AuditLogs = () => {
 
   const categories = ['all', 'invoice', 'repayment', 'fraud'];
 
+  // RENDER CONTENT HELPER
+  const renderTableContent = () => {
+    // 1. LOADING STATE
+    if (loading) {
+      return (
+        <tr>
+          <td colSpan="4" className="p-4">
+            <div className="space-y-4">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="h-12 bg-gray-50 rounded-lg animate-pulse" />
+              ))}
+            </div>
+          </td>
+        </tr>
+      );
+    }
+
+    // 2. ERROR STATE (User Friendly Version)
+    if (error) {
+      return (
+        <tr>
+          <td colSpan="4" className="px-6 py-16 text-center">
+            <div className="flex flex-col items-center justify-center">
+              <div className="p-3 bg-gray-50 rounded-full mb-3 border border-gray-100">
+                <ShieldAlert className="w-6 h-6 text-gray-400" />
+              </div>
+              <h3 className="text-sm font-semibold text-gray-900">Unable to load history</h3>
+              <p className="text-xs text-gray-500 mt-1 mb-4">
+                Your activity history will appear here once you start using the app.
+              </p>
+              <button
+                onClick={refetch}
+                className="px-4 py-2 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors shadow-sm"
+              >
+                Refresh Page
+              </button>
+            </div>
+          </td>
+        </tr>
+      );
+    }
+
+    // 3. EMPTY STATE (No Logs)
+    if (filteredLogs.length === 0) {
+      return (
+        <tr>
+          <td colSpan="4" className="px-6 py-16 text-center">
+            <div className="flex flex-col items-center justify-center">
+              <div className="p-3 bg-gray-50 rounded-full mb-3 border border-gray-100">
+                <Filter className="w-6 h-6 text-gray-300" />
+              </div>
+              <h3 className="text-sm font-medium text-gray-900">No logs found</h3>
+              <p className="text-xs text-gray-500 mt-1">
+                There are no events matching your criteria.
+              </p>
+              <button
+                onClick={() => { setFilter('all'); setSearch(''); }}
+                className="mt-3 text-xs font-medium text-indigo-600 hover:text-indigo-700"
+              >
+                Clear filters
+              </button>
+            </div>
+          </td>
+        </tr>
+      );
+    }
+
+    // 4. DATA STATE
+    return filteredLogs.map((log) => {
+      const typeStyle = getTypeStyles(log.entityType);
+      const statusClass = getStatusStyles(log.action);
+
+      return (
+        <tr
+          key={log._id}
+          className="group hover:bg-indigo-50/30 transition-colors duration-150"
+        >
+          {/* Timestamp */}
+          <td className="px-4 py-2.5 whitespace-nowrap">
+            <div className="flex flex-col">
+              <span className="text-xs font-medium text-gray-900">
+                {new Date(log.createdAt).toLocaleDateString()}
+              </span>
+              <span className="text-[10px] text-gray-400 font-mono">
+                {new Date(log.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              </span>
+            </div>
+          </td>
+
+          {/* Action Badge */}
+          <td className="px-4 py-2.5 whitespace-nowrap">
+            <span className={`inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wide ${statusClass}`}>
+              {log.action.replace(/_/g, ' ')}
+            </span>
+          </td>
+
+          {/* Message/Details */}
+          <td className="px-4 py-2.5">
+            <p className="text-xs text-gray-700 leading-snug font-medium line-clamp-2">
+              {log.message}
+            </p>
+          </td>
+
+          {/* Category Icon */}
+          <td className="px-4 py-2.5 whitespace-nowrap">
+            <div className="flex items-center gap-2">
+              <div className={`p-1.5 rounded-md border ${typeStyle.bg} ${typeStyle.text}`}>
+                {typeStyle.icon}
+              </div>
+              <span className={`text-xs font-semibold capitalize ${typeStyle.text}`}>
+                {log.entityType}
+              </span>
+            </div>
+          </td>
+        </tr>
+      );
+    });
+  };
+
   return (
     <div className="w-full max-w-[1600px] mx-auto space-y-5 animate-in fade-in duration-500">
 
       {/* HEADER SECTION */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 px-1">
         <div>
-          {/* UPDATED: Reduced font size to text-2xl */}
-          <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-3">
-            Event Log
-
-            <span className="inline-flex items-center gap-1 px-5 py-[5px] rounded-md
-  bg-gradient-to-b from-white to-gray-50
-  border border-gray-200
-  text-gray-600 text-[10px] font-semibold
-  shadow-sm ring-1 ring-gray-900/5 leading-none">
-
-              <Sparkles className="w-2.5 h-2.5 text-indigo-500" />
-              {logs?.length || 0} Events
-            </span>
-
-          </h1>
-          <p className="text-xs text-gray-200 mt-2 max-w-lg font-medium">
-            Monitor sensitive actions, system events, and security alerts across your organization.
+          <div className="flex items-center gap-3 mb-1">
+             <h1 className="text-2xl font-bold text-white tracking-tight">
+                Event Log
+             </h1>
+          </div>
+          
+          <p className="text-xs text-gray-200 mt-1 max-w-lg font-medium flex items-center gap-2">
+             <span>Monitor sensitive actions and system events.</span>
+             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-white/10 text-white border border-white/20 text-[10px]">
+                <Sparkles className="w-2.5 h-2.5 text-indigo-300" />
+                {logs?.length || 0} Events
+             </span>
           </p>
         </div>
 
         <div className="flex items-center gap-2">
+          <button onClick={() => refetch()} className="flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-medium rounded-lg transition-all shadow-sm">
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+            Refresh
+          </button>
           <button className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 text-gray-600 text-xs font-medium rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-all shadow-sm">
             <Download className="w-3.5 h-3.5" />
             Export CSV
@@ -139,7 +217,6 @@ const AuditLogs = () => {
 
         {/* CONTROLS BAR */}
         <div className="p-3 border-b border-gray-100 bg-gray-50/50 flex flex-col md:flex-row gap-3 justify-between items-center">
-
           {/* TAB FILTERS */}
           <div className="flex p-1 w-full md:w-auto overflow-x-auto no-scrollbar gap-1">
             {categories.map((type) => (
@@ -172,7 +249,7 @@ const AuditLogs = () => {
         </div>
 
         {/* TABLE */}
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto min-h-[300px]">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-50/50 border-b border-gray-200">
@@ -194,77 +271,7 @@ const AuditLogs = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {filteredLogs.length > 0 ? (
-                filteredLogs.map((log) => {
-                  const typeStyle = getTypeStyles(log.entityType);
-                  const statusClass = getStatusStyles(log.action);
-
-                  return (
-                    <tr
-                      key={log._id}
-                      className="group hover:bg-indigo-50/30 transition-colors duration-150"
-                    >
-                      {/* Timestamp */}
-                      <td className="px-4 py-2.5 whitespace-nowrap">
-                        <div className="flex flex-col">
-                          <span className="text-xs font-medium text-gray-900">
-                            {new Date(log.createdAt).toLocaleDateString()}
-                          </span>
-                          <span className="text-[10px] text-gray-400 font-mono">
-                            {new Date(log.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                          </span>
-                        </div>
-                      </td>
-
-                      {/* Action Badge */}
-                      <td className="px-4 py-2.5 whitespace-nowrap">
-                        <span className={`inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wide ${statusClass}`}>
-                          {log.action.replace(/_/g, ' ')}
-                        </span>
-                      </td>
-
-                      {/* Message/Details */}
-                      <td className="px-4 py-2.5">
-                        <p className="text-xs text-gray-700 leading-snug font-medium line-clamp-2">
-                          {log.message}
-                        </p>
-                      </td>
-
-                      {/* Category Icon */}
-                      <td className="px-4 py-2.5 whitespace-nowrap">
-                        <div className="flex items-center gap-2">
-                          <div className={`p-1.5 rounded-md border ${typeStyle.bg} ${typeStyle.text}`}>
-                            {typeStyle.icon}
-                          </div>
-                          <span className={`text-xs font-semibold capitalize ${typeStyle.text}`}>
-                            {log.entityType}
-                          </span>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })
-              ) : (
-                <tr>
-                  <td colSpan="4" className="px-6 py-16 text-center">
-                    <div className="flex flex-col items-center justify-center">
-                      <div className="p-3 bg-gray-50 rounded-full mb-3 border border-gray-100">
-                        <Filter className="w-6 h-6 text-gray-300" />
-                      </div>
-                      <h3 className="text-sm font-medium text-gray-900">No logs found</h3>
-                      <p className="text-xs text-gray-500 mt-1">
-                        Try adjusting your search or filter criteria.
-                      </p>
-                      <button
-                        onClick={() => { setFilter('all'); setSearch(''); }}
-                        className="mt-3 text-xs font-medium text-indigo-600 hover:text-indigo-700"
-                      >
-                        Clear filters
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              )}
+              {renderTableContent()}
             </tbody>
           </table>
         </div>
@@ -275,8 +282,8 @@ const AuditLogs = () => {
             Showing {filteredLogs.length} results
           </span>
           <div className="flex gap-1">
-            <button disabled className="px-2 py-1 text-[10px] font-medium text-gray-400 bg-white border border-gray-200 rounded hover:bg-gray-50 disabled:opacity-50">Previous</button>
-            <button className="px-2 py-1 text-[10px] font-medium text-gray-600 bg-white border border-gray-200 rounded hover:bg-gray-50">Next</button>
+            <button disabled={loading || !logs?.length} className="px-2 py-1 text-[10px] font-medium text-gray-400 bg-white border border-gray-200 rounded hover:bg-gray-50 disabled:opacity-50">Previous</button>
+            <button disabled={loading || !logs?.length} className="px-2 py-1 text-[10px] font-medium text-gray-600 bg-white border border-gray-200 rounded hover:bg-gray-50 disabled:opacity-50">Next</button>
           </div>
         </div>
       </div>
