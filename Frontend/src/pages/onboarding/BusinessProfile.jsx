@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Building2, Briefcase, IndianRupee, FileText, ArrowRight, MapPin, 
-  Mail, Phone, Globe, User, Users, CreditCard, CheckSquare, Activity 
+  Mail, Phone, Globe, User, CreditCard, CheckSquare, Activity 
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
@@ -186,14 +186,16 @@ const BusinessProfile = () => {
         yearsInOperation: Number(formData.yearsInOperation) || 0,
       };
 
-      console.log("Submitting Payload:", payload);
+      console.log("Submitting Payload to API:", payload);
+      
       await businessService.createProfile(payload);
 
       toast.success("Profile created successfully!");
       navigate('/dashboard');
     } catch (error) {
-      console.error(error);
-      toast.error(error.response?.data?.message || "Failed to create profile");
+      console.error("Submission Error:", error);
+      const errorMessage = error.response?.data?.message || "Failed to create profile. Please try again.";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -331,7 +333,7 @@ const BusinessProfile = () => {
             <div className="grid md:grid-cols-2 gap-3 md:gap-4">
               <InputField
                 label="Full Name"
-                placeholder="John Doe"
+                placeholder="Your name"
                 icon={User}
                 value={formData.contactName}
                 onChange={(e) => setFormData({ ...formData, contactName: e.target.value })}
@@ -351,7 +353,7 @@ const BusinessProfile = () => {
             <div className="grid md:grid-cols-2 gap-3 md:gap-4">
               <InputField
                 label="Contact Email"
-                placeholder="john@acme.com"
+                placeholder="user@acme.com"
                 icon={Mail}
                 type="email"
                 value={formData.contactEmail}

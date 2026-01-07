@@ -21,32 +21,26 @@ const Dashboard = () => {
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
-        let profileData = null;
-        let activityData = [];
-
+        
+        // 1. Fetch Profile Data from DB
         try {
-           profileData = await businessService.getProfile();
+           const profileData = await businessService.getProfile();
+           setProfile(profileData);
         } catch (err) {
-           console.warn("Using fallback data", err);
-           profileData = {
-             businessName: user?.businessName || "K-Tech Innovations",
-             annualRevenue: 0,
-             yearsInOperation: 0,
-             activeInvoicesCount: 0,
-             creditUtilization: 0,
-             revenueTrend: 0
-           };
+           console.error("Failed to fetch profile", err);
+           if (err.response && err.response.status === 404) {
+             setProfile(null); 
+           }
         }
 
+        // 2. Fetch Recent Activities from DB
         try {
-           if (businessService.getRecentActivities) {
-               activityData = await businessService.getRecentActivities();
-           }
-        } catch (err) { console.warn(err); }
+           const activityData = await businessService.getRecentActivities();
+           setActivities(activityData);
+        } catch (err) { 
+            console.error("Failed to fetch activities", err); 
+        }
 
-        setProfile(profileData);
-        setActivities(activityData);
-        
       } catch (error) {
         console.error("Dashboard error:", error);
       } finally {
@@ -91,7 +85,9 @@ const Dashboard = () => {
           <div>
             <h1 className="text-xl font-bold text-white tracking-tight">Dashboard Overview</h1>
             <p className="text-indigo-200 text-xs mt-1 font-medium">
-              Welcome back, <span className="text-white">{profile?.businessName}</span>
+              Welcome back, <span className="text-white">
+                {profile?.businessName || user?.businessName || "My Business"}
+              </span>
             </p>
           </div>
           <div className="flex gap-2">

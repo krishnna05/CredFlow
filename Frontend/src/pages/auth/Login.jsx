@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   LogIn, Mail, Lock, ArrowRight,
-  Eye, EyeOff, ShieldCheck, CheckCircle2, TrendingUp
+  Eye, EyeOff, ShieldCheck, CheckCircle2, TrendingUp, AlertCircle
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import useAuth from '../../hooks/useAuth';
 
@@ -25,21 +25,29 @@ const Login = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  // New state to handle inline error messages
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    // Clear error when user starts typing again
+    if (error) setError('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError(''); // Clear previous errors
 
     try {
       await login(formData.email, formData.password);
       toast.success('Welcome back!');
-    } catch (error) {
-      console.error(error);
-      toast.error(error.response?.data?.message || 'Invalid credentials');
+    } catch (err) {
+      console.error(err);
+      // Set the inline error message
+      const errorMessage = err.response?.data?.message || 'Invalid email or password';
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -105,7 +113,11 @@ const Login = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full bg-slate-900/50 border border-slate-800 text-slate-200 text-sm rounded-xl pl-11 pr-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all placeholder:text-slate-600 hover:border-slate-700 hover:bg-slate-900/80"
+                  className={`w-full bg-slate-900/50 border text-slate-200 text-sm rounded-xl pl-11 pr-4 py-3.5 focus:outline-none focus:ring-2 transition-all placeholder:text-slate-600 hover:bg-slate-900/80 ${
+                    error 
+                      ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500/20' 
+                      : 'border-slate-800 focus:ring-indigo-500/50 focus:border-indigo-500 hover:border-slate-700'
+                  }`}
                 />
               </div>
             </div>
@@ -132,7 +144,11 @@ const Login = () => {
                   value={formData.password}
                   onChange={handleChange}
                   required
-                  className="w-full bg-slate-900/50 border border-slate-800 text-slate-200 text-sm rounded-xl pl-11 pr-10 py-3.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all placeholder:text-slate-600 hover:border-slate-700 hover:bg-slate-900/80"
+                  className={`w-full bg-slate-900/50 border text-slate-200 text-sm rounded-xl pl-11 pr-10 py-3.5 focus:outline-none focus:ring-2 transition-all placeholder:text-slate-600 hover:bg-slate-900/80 ${
+                    error 
+                      ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500/20' 
+                      : 'border-slate-800 focus:ring-indigo-500/50 focus:border-indigo-500 hover:border-slate-700'
+                  }`}
                 />
                 <button
                   type="button"
@@ -144,8 +160,23 @@ const Login = () => {
               </div>
             </div>
 
+            {/* Error Message Display */}
+            <AnimatePresence mode="wait">
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10, height: 0 }}
+                  animate={{ opacity: 1, y: 0, height: 'auto' }}
+                  exit={{ opacity: 0, y: -10, height: 0 }}
+                  className="flex items-center gap-2 text-red-400 bg-red-500/10 border border-red-500/20 p-3 rounded-xl text-xs font-medium"
+                >
+                  <AlertCircle size={16} className="shrink-0" />
+                  <p>{error}</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             {/* Spacer */}
-            <div className="h-2"></div>
+            {!error && <div className="h-2"></div>}
 
             {/* Submit Button */}
             <button
