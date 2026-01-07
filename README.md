@@ -79,17 +79,29 @@ This creates a **liquidity gap** that affects daily operations.
 ## 🖼️ Project Screenshots
 
 
+### Landing Page
+![Dashboard](screenshots/CredFlow-1.png)
+
+### Sign up Page
+![Dashboard](screenshots/CredFlow-2.png)
+
+### Log in Page
+![Dashboard](screenshots/CredFlow-3.png)
+
 ### Dashboard Overview
-![Dashboard](screenshots/credflow-4)
+![Dashboard](screenshots/CredFlow-4.png)
+
+### Invoice Assessment
+![Dashboard](screenshots/CredFlow-5.png)
 
 ### Invoice Upload & OCR Extraction
-![Invoice Upload](screenshots/credflow-6)
+![Invoice Upload](screenshots/CredFlow-6.png)
 
 ### Risk & Credit Assessment
-![Risk Engine](screenshots/credflow-7)
+![Risk Engine](screenshots/CredFlow-7.png)
 
 ### Financing Decision Flow
-![Financing](screenshots/credflow-8)
+![Financing](screenshots/CredFlow-8.png)
 
 ---
 
