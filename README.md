@@ -5,11 +5,10 @@
 
 This project is built to **mirror how production FinTech systems actually work**, focusing on **risk containment, auditability, and reliability** — not just UI or CRUD APIs.
 
-> ⚠️ This is **not a tutorial project**. It demonstrates real financial decision logic used in B2B lending platforms.
 
 ---
 
-## 🌟 Why Recruiters Care About This Project
+## 🌟 Key Features
 
 ✔ End-to-end FinTech workflow (Invoice → Risk → Credit → Financing)  
 ✔ AI integration with real document intelligence (OCR)  
